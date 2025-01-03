@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -7,18 +9,13 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useSession } from "@clerk/nextjs";
+
+const BACKEND_URL = "https://test-bos-omega.vercel.app";
 
 function AddProducts() {
   const [name, setName] = useState("");
@@ -28,31 +25,85 @@ function AddProducts() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { session } = useSession();
 
-  const handleAddProduct = () => {
-    console.log({ name, category, price, stock, description, image });
-    alert("Product added successfully!");
-    // Reset form
-    setName("");
-    setCategory("");
-    setPrice("");
-    setStock("");
-    setDescription("");
-    setImage(null);
-    setPreviewUrl(null);
+  const handleAddProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!session) {
+      alert("You need to be logged in to add a product.");
+      return;
+    }
+
+    try {
+      const token = await session.getToken();
+
+      let imageUrl = null;
+      if (image) {
+        imageUrl = await uploadImageToBlobStorage(image, token as string);
+      }
+
+      const response = await fetch(`${BACKEND_URL}/api/products`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name,
+          category,
+          price: parseFloat(price),
+          stock: parseInt(stock, 10),
+          description,
+          imageUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add product: ${response.statusText}`);
+      }
+
+      alert("Product added successfully!");
+      setName("");
+      setCategory("");
+      setPrice("");
+      setStock("");
+      setDescription("");
+      setImage(null);
+      setPreviewUrl(null);
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Error adding product.");
+    }
+  };
+
+  const uploadImageToBlobStorage = async (file: File, token: string): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append("imageFile", file);
+
+      const response = await fetch(`${BACKEND_URL}/api/upload`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Image upload failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.url; // Assuming the backend returns the uploaded image URL as `url`.
+    } catch (error) {
+      console.error("Image upload error:", error);
+      throw new Error("Failed to upload image.");
+    }
   };
 
   const handleImageUpload = (file: File) => {
     setImage(file);
     setPreviewUrl(URL.createObjectURL(file));
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      handleImageUpload(file);
-    }
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,12 +116,10 @@ function AddProducts() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add Product</CardTitle>
         <CardDescription>Fill in the details to add a new product.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4">
-          {/* Product Name */}
+        <form className="grid gap-4" onSubmit={handleAddProduct}>
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="name">Product Name</Label>
             <Input
@@ -81,24 +130,16 @@ function AddProducts() {
             />
           </div>
 
-          {/* Category */}
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="category">Category</Label>
-            <Select onValueChange={(value) => setCategory(value)}>
-              <SelectTrigger id="category">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Burgers">Burgers</SelectItem>
-                <SelectItem value="Pizza">Pizza</SelectItem>
-                <SelectItem value="Ice Cream">Ice Cream</SelectItem>
-                <SelectItem value="Snack">Snack</SelectItem>
-                <SelectItem value="Drink">Drink</SelectItem>
-              </SelectContent>
-            </Select>
+            <Input
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Enter product category (e.g., Food, Drinks)"
+            />
           </div>
 
-          {/* Price */}
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="price">Price ($)</Label>
             <Input
@@ -112,7 +153,6 @@ function AddProducts() {
             />
           </div>
 
-          {/* Stock Level */}
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="stock">Stock Level</Label>
             <Input
@@ -125,7 +165,6 @@ function AddProducts() {
             />
           </div>
 
-          {/* Description */}
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="description">Description</Label>
             <Textarea
@@ -137,33 +176,28 @@ function AddProducts() {
             />
           </div>
 
-          {/* Image Upload */}
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="image">Product Image</Label>
             <div
-              className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer"
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
+              className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition"
+              onClick={() => document.getElementById("imageInput")?.click()}
             >
               {previewUrl ? (
-                <div className="relative w-full h-40">
-                  <Image
-                    src={previewUrl}
-                    alt="Uploaded Image Preview"
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
+                <Image
+                  src={previewUrl}
+                  alt="Uploaded Image Preview"
+                  width={100}
+                  height={100}
+                  className="object-cover rounded-lg mx-auto"
+                />
               ) : (
                 <p className="text-gray-500">
                   Drag and drop an image here, or{" "}
-                  <span className="text-blue-600 underline cursor-pointer">
-                    browse files
-                  </span>
+                  <span className="text-blue-600 underline">browse files</span>
                 </p>
               )}
               <input
-                id="image"
+                id="imageInput"
                 type="file"
                 accept="image/*"
                 onChange={handleFileInputChange}
@@ -171,12 +205,9 @@ function AddProducts() {
               />
             </div>
           </div>
+          <Button type="submit">Add Product</Button>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between left-52">
-        {/* <Button variant="outline">Cancel</Button> */}
-        <Button onClick={handleAddProduct}>Add Product</Button>
-      </CardFooter>
     </Card>
   );
 }

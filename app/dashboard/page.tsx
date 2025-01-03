@@ -11,7 +11,7 @@ import ProductPieChart from "@/components/ProductPieChart";
 import BestProduct from "@/components/BestProduct";
 
 export default function DashboardPage() {
-  const { user } = useUser(); // Fetch user from Clerk
+  const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);

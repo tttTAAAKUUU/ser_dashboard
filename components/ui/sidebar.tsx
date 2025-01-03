@@ -39,10 +39,10 @@ export function Sidebar({ className }: SidebarProps) {
     { label: "Categories", icon: Boxes, href: "/dashboard/category" },
     { label: "Manage Staff", icon: User, href: "/dashboard/staffmembers" },
     // { label: "Promotions", icon: Boxes, href: "/dashboard/promotions" },
-    { label: "Analytics", icon: BarChart, href: "/dashboard/analytics" },
-    { label: "Customers", icon: Users, href: "/dashboard/customers" },
-    { label: "Email", icon: Mail, href: "/dashboard/email" },
-    { label: "Messages", icon: MessageSquare, href: "/dashboard/messages" },
+    // { label: "Analytics", icon: BarChart, href: "/dashboard/analytics" },
+    // { label: "Customers", icon: Users, href: "/dashboard/customers" },
+    // { label: "Email", icon: Mail, href: "/dashboard/email" },
+    // { label: "Messages", icon: MessageSquare, href: "/dashboard/messages" },
     { label: "Settings", icon: Settings, href: "/dashboard/settings" },
   ];
 
@@ -71,7 +71,7 @@ export function Sidebar({ className }: SidebarProps) {
         {/* Logo and Dashboard Title */}
         <div className={cn("flex items-center", isCollapsed ? "justify-center" : "")}>
           <Image
-            src="https://utfs.io/f/555e3ace-5e98-4068-883f-28033f9f5b7d-ilwz8r.png"
+            src="https://utfs.io/f/vjV372zIanAGEJxDKXg2Y7FETPSGKLjvqoNtVp5efcmwya9H"
             alt="BOSPay Logo"
             width={48}
             height={48}
@@ -143,7 +143,7 @@ export function Sidebar({ className }: SidebarProps) {
           ))}
 
           {/* Logout Button */}
-          <SignOutButton>
+          <SignOutButton redirectUrl="/sign-in">
             <Button
               variant="ghost"
               className={cn(
