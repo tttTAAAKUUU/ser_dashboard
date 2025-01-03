@@ -17,6 +17,9 @@ export default function DashboardPage() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  // Simulating no recent transactions
+  const recentSales: any[] = []; // Replace with actual data when available
+
   return (
     <div className="space-y-8 font-poppins px-4 lg:px-8 pb-8">
       {/* Header Section */}
@@ -58,8 +61,8 @@ export default function DashboardPage() {
             <CreditCard className="h-4 w-4 text-light-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">+34.1k</div>
-            <p className="text-xs text-dark-turquoise">+50.23% from last month</p>
+            <div className="text-2xl font-bold text-white">0</div>
+            <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-tr from-pacific-blue to-dark-turquoise">
@@ -70,8 +73,8 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-dark-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">+6.2k</div>
-            <p className="text-xs text-dark-turquoise">+70.23% from last month</p>
+            <div className="text-2xl font-bold text-white">0</div>
+            <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-tr from-medium-purple to-sapphire">
@@ -82,8 +85,8 @@ export default function DashboardPage() {
             <Activity className="h-4 w-4 text-light-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">R261.3</div>
-            <p className="text-xs text-dark-turquoise">+90.23% from last month</p>
+            <div className="text-2xl font-bold text-white">R0</div>
+            <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
       </div>
@@ -118,32 +121,32 @@ export default function DashboardPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-white text-sapphire">
-                <tr>
-                  <th className="py-2 px-4">Product</th>
-                  <th className="py-2 px-4">Customer</th>
-                  <th className="py-2 px-4">Price</th>
-                  <th className="py-2 px-4">Payment</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-t">
-                  <td className="py-2 px-4">Handmade Pouch</td>
-                  <td className="py-2 px-4">John Bushmill</td>
-                  <td className="py-2 px-4">R121.00</td>
-                  <td className="py-2 px-4 text-dark-turquoise">Paid</td>
-                </tr>
-                <tr className="border-t">
-                  <td className="py-2 px-4">Smartwatch E2</td>
-                  <td className="py-2 px-4">Ilham Budi Agung</td>
-                  <td className="py-2 px-4">R590.00</td>
-                  <td className="py-2 px-4 text-medium-purple">Due</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {recentSales.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-white text-sapphire">
+                  <tr>
+                    <th className="py-2 px-4">Product</th>
+                    <th className="py-2 px-4">Customer</th>
+                    <th className="py-2 px-4">Price</th>
+                    <th className="py-2 px-4">Payment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentSales.map((sale, index) => (
+                    <tr key={index} className="border-t">
+                      <td className="py-2 px-4">{sale.product}</td>
+                      <td className="py-2 px-4">{sale.customer}</td>
+                      <td className="py-2 px-4">R{sale.price}</td>
+                      <td className="py-2 px-4 text-dark-turquoise">{sale.payment}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-white text-center py-4">No recent transactions</p>
+          )}
         </CardContent>
       </Card>
     </div>
