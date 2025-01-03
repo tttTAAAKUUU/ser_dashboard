@@ -49,8 +49,8 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 text-dark-turquoise" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">R45,231.89</div>
-            <p className="text-xs text-dark-turquoise">+55.23% from last month</p>
+            <div className="text-2xl font-bold text-white">R0</div>
+            <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-tr from-sapphire to-dark-turquoise">
