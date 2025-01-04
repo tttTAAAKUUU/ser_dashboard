@@ -101,43 +101,54 @@ const ProductsPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg cursor-pointer transition-all"
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => (
+      <div
+        key={product.id}
+        className="border rounded-lg p-4 shadow hover:shadow-lg cursor-pointer transition-all"
+      >
+        <div className="w-full h-36 overflow-hidden rounded-lg mb-4">
+          <Image
+            src={product.image || "https://via.placeholder.com/150"}
+            alt={product.name}
+            width={144}
+            height={90}
+            className="object-cover w-full h-full"
+          />
+        </div>
+        <h3 className="text-lg font-medium text-white">{product.name}</h3>
+        <p className="text-sm text-gray-500">{product.description}</p>
+        <div className="flex justify-between items-center mt-4">
+          <span className="text-pacific-blue font-bold">
+            R{product.price.toFixed(2)}
+          </span>
+          <span
+            className={`text-xs px-2 py-1 rounded ${
+              product.stock > 10
+                ? "bg-green-500 text-white"
+                : product.stock > 0
+                ? "bg-yellow-500 text-white"
+                : "bg-red-500 text-white"
+            }`}
           >
-            <div className="w-full h-36 overflow-hidden rounded-lg mb-4">
-              <Image
-                src={product.image || "https://via.placeholder.com/150"}
-                alt={product.name}
-                width={144}
-                height={90}
-                className="object-cover w-full h-full"
-              />
-            </div>
-            <h3 className="text-lg font-medium text-white">{product.name}</h3>
-            <p className="text-sm text-gray-500">{product.description}</p>
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-pacific-blue font-bold">R{product.price.toFixed(2)}</span>
-              <span
-                className={`text-xs px-2 py-1 rounded ${
-                  product.stock > 10
-                    ? "bg-green-500 text-white"
-                    : product.stock > 0
-                    ? "bg-yellow-500 text-white"
-                    : "bg-red-500 text-white"
-                }`}
-              >
-                {product.stock > 10
-                  ? "In Stock"
-                  : product.stock > 0
-                  ? "Low Stock"
-                  : "Out of Stock"}
-              </span>
-            </div>
-          </div>
-        ))}
+            {product.stock > 10
+              ? "In Stock"
+              : product.stock > 0
+              ? "Low Stock"
+              : "Out of Stock"}
+          </span>
+        </div>
       </div>
+    ))
+  ) : (
+    <div className="text-center text-gray-500 text-lg py-6">
+      No products available.{" "}
+      <span className="text-pacific-blue font-medium cursor-pointer" onClick={() => setIsModalOpen(true)}>
+        Add some products!
+      </span>
+    </div>
+  )}
+</div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg">
