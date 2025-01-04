@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Image from "next/image";
-import { ArrowLeft, Upload, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -73,9 +72,7 @@ export default function EditProductPage() {
     description: "",
     price: 0,
     stock: 0,
-    image: "",
   });
-  const [newImage, setNewImage] = useState<File | null>(null);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
@@ -84,14 +81,6 @@ export default function EditProductPage() {
       setFormData(product);
     }
   }, [product]);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setNewImage(file);
-      setFormData((prev) => ({ ...prev, image: URL.createObjectURL(file) }));
-    }
-  };
 
   const handleSave = () => {
     updateMutation.mutate(formData);
@@ -146,36 +135,8 @@ export default function EditProductPage() {
       </Button>
 
       <Card className="w-full max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl">
-        <CardHeader className="flex flex-wrap justify-between items-start gap-4 border-b border-gray-700 pb-6">
+        <CardHeader className="border-b border-gray-700 pb-6">
           <CardTitle className="text-2xl sm:text-3xl font-bold text-white">Edit Product</CardTitle>
-          <div className="w-32 h-32 sm:w-40 sm:h-40 relative rounded-lg overflow-hidden bg-gray-700">
-            {formData.image ? (
-              <Image src={formData.image} alt="Product Image" fill className="object-cover" />
-            ) : (
-              <div className="flex items-center justify-center h-full text-gray-400">
-                No Image
-              </div>
-            )}
-            <div className="absolute bottom-2 left-2">
-              <Input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-              <label htmlFor="image">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="cursor-pointer flex items-center gap-2 text-xs bg-gray-800 hover:bg-gray-700"
-                >
-                  <Upload className="h-4 w-4" />
-                  Replace
-                </Button>
-              </label>
-            </div>
-          </div>
         </CardHeader>
 
         <Tabs defaultValue="details" className="w-full">
@@ -197,7 +158,10 @@ export default function EditProductPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category" className="text-gray-300">Category</Label>
-                <Select onValueChange={(value) => setFormData({ ...formData, category: value })} defaultValue={formData.category}>
+                <Select
+                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                  defaultValue={formData.category}
+                >
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -295,4 +259,3 @@ export default function EditProductPage() {
     </motion.div>
   );
 }
-
