@@ -73,12 +73,16 @@ export default function EditProductPage() {
     price: 0,
     stock: 0,
   });
+  const [categories, setCategories] = useState<string[]>([]);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   useEffect(() => {
     if (product) {
       setFormData(product);
+      if (product.category) {
+        setCategories([product.category]); // Assuming `category` is a single string
+      }
     }
   }, [product]);
 
@@ -166,11 +170,11 @@ export default function EditProductPage() {
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700">
-                    <SelectItem value="Burgers">Burgers</SelectItem>
-                    <SelectItem value="Pizza">Pizza</SelectItem>
-                    <SelectItem value="Ice Cream">Ice Cream</SelectItem>
-                    <SelectItem value="Snack">Snack</SelectItem>
-                    <SelectItem value="Drink">Drink</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
