@@ -5,12 +5,24 @@ import { fetchProducts, Product } from "@/data/products";
 import { useSession } from "@clerk/nextjs";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import AddProducts from "@/components/AddProducts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { LoadingSpinner } from "@/components/ui/loader";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
@@ -64,6 +76,7 @@ const ProductsPage = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* Header Section */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-white">Product List</h1>
         <Button
@@ -74,6 +87,7 @@ const ProductsPage = () => {
         </Button>
       </div>
 
+      {/* Filters */}
       <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
           <label htmlFor="search" className="text-sm font-medium text-gray-300">
@@ -123,6 +137,7 @@ const ProductsPage = () => {
         </div>
       </div>
 
+      {/* Product Grid */}
       <motion.div 
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         initial={{ opacity: 0 }}
@@ -173,9 +188,11 @@ const ProductsPage = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-pacific-blue hover:bg-cobalt transition-colors">
-                    View Details
-                  </Button>
+                  <Link href={`/dashboard/products/${product.id}`}>
+                    <Button className="w-full bg-pacific-blue hover:bg-cobalt transition-colors">
+                      View Details
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </motion.div>
@@ -193,6 +210,7 @@ const ProductsPage = () => {
         )}
       </motion.div>
 
+      {/* Add Product Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg bg-gray-800 text-white">
           <DialogHeader>
@@ -206,4 +224,3 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
-
