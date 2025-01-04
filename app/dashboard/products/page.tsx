@@ -8,7 +8,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import AddProducts from "@/components/AddProducts";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { LoadingSpinner } from "@/components/ui/loader"; // Import the spinner component
+import { LoadingSpinner } from "@/components/ui/loader";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 const ProductsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -48,7 +53,7 @@ const ProductsPage = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner className="text-pacific-blue w-10 h-10" /> {/* Add size and color classes */}
+        <LoadingSpinner className="text-pacific-blue w-10 h-10" />
       </div>
     );
   }
@@ -58,102 +63,140 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-white">Product List</h1>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold text-white">Product List</h1>
         <Button
-          className="bg-pacific-blue text-white rounded-lg px-4 py-2 shadow hover:bg-cobalt transition-colors"
+          className="bg-pacific-blue text-white rounded-lg px-6 py-3 shadow-lg hover:bg-cobalt transition-all duration-300 transform hover:scale-105"
           onClick={() => setIsModalOpen(true)}
         >
           + Add Product
         </Button>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <input
-          type="text"
-          placeholder="Search by product name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="h-10 w-full rounded-lg border border-gray-300 text-gray-700 bg-white px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
-        />
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="h-10 w-full rounded-lg border border-gray-300 text-gray-700 bg-white px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
-        >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        <select
-          value={stockFilter}
-          onChange={(e) => setStockFilter(e.target.value)}
-          className="h-10 w-full rounded-lg border border-gray-300 text-gray-700 bg-white px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
-        >
-          <option value="All">All Stock</option>
-          <option value="In Stock">In Stock</option>
-          <option value="Low Stock">Low Stock</option>
-          <option value="Out of Stock">Out of Stock</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {filteredProducts.length > 0 ? (
-    filteredProducts.map((product) => (
-      <div
-        key={product.id}
-        className="border rounded-lg p-4 shadow hover:shadow-lg cursor-pointer transition-all"
-      >
-        <div className="w-full h-36 overflow-hidden rounded-lg mb-4">
-          <Image
-            src={product.image || "https://via.placeholder.com/150"}
-            alt={product.name}
-            width={144}
-            height={90}
-            className="object-cover w-full h-full"
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-2">
+          <label htmlFor="search" className="text-sm font-medium text-gray-300">
+            Search Products
+          </label>
+          <Input
+            id="search"
+            type="text"
+            placeholder="Search by product name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
           />
         </div>
-        <h3 className="text-lg font-medium text-white">{product.name}</h3>
-        <p className="text-sm text-gray-500">{product.description}</p>
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-pacific-blue font-bold">
-            R{product.price.toFixed(2)}
-          </span>
-          <span
-            className={`text-xs px-2 py-1 rounded ${
-              product.stock > 10
-                ? "bg-green-500 text-white"
-                : product.stock > 0
-                ? "bg-yellow-500 text-white"
-                : "bg-red-500 text-white"
-            }`}
-          >
-            {product.stock > 10
-              ? "In Stock"
-              : product.stock > 0
-              ? "Low Stock"
-              : "Out of Stock"}
-          </span>
+        <div className="space-y-2">
+          <label htmlFor="category" className="text-sm font-medium text-gray-300">
+            Category
+          </label>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger id="category" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="stock" className="text-sm font-medium text-gray-300">
+            Stock Status
+          </label>
+          <Select value={stockFilter} onValueChange={setStockFilter}>
+            <SelectTrigger id="stock" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient">
+              <SelectValue placeholder="Select stock status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All">All Stock</SelectItem>
+              <SelectItem value="In Stock">In Stock</SelectItem>
+              <SelectItem value="Low Stock">Low Stock</SelectItem>
+              <SelectItem value="Out of Stock">Out of Stock</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
-    ))
-  ) : (
-    <div className="text-center text-gray-500 text-lg py-6">
-      No products available.{" "}
-      <span className="text-pacific-blue font-medium cursor-pointer" onClick={() => setIsModalOpen(true)}>
-        Add some products!
-      </span>
-    </div>
-  )}
-</div>
+
+      <motion.div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <motion.div
+              key={product.id}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card className="overflow-hidden bg-gray-800 border-gray-700">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={product.image || "https://via.placeholder.com/150"}
+                    alt={product.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="transition-transform duration-300 hover:scale-110"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold text-white">{product.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-400 line-clamp-2">{product.description}</p>
+                  <div className="mt-4 flex justify-between items-center">
+                    <span className="text-pacific-blue font-bold text-lg">
+                      R{product.price.toFixed(2)}
+                    </span>
+                    <Badge
+                      variant={
+                        product.stock > 10
+                          ? "default"
+                          : product.stock > 0
+                          ? "secondary"
+                          : "destructive"
+                      }
+                    >
+                      {product.stock > 10
+                        ? "In Stock"
+                        : product.stock > 0
+                        ? "Low Stock"
+                        : "Out of Stock"}
+                    </Badge>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full bg-pacific-blue hover:bg-cobalt transition-colors">
+                    View Details
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))
+        ) : (
+          <div className="col-span-full text-center text-gray-400 text-lg py-12">
+            No products available.{" "}
+            <span
+              className="text-pacific-blue font-medium cursor-pointer hover:underline"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Add some products!
+            </span>
+          </div>
+        )}
+      </motion.div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg bg-gray-800 text-white">
           <DialogHeader>
-            <DialogTitle>Add New Product</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">Add New Product</DialogTitle>
           </DialogHeader>
           <AddProducts />
         </DialogContent>
@@ -163,3 +206,4 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+
