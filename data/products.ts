@@ -77,3 +77,22 @@ export const updateProductById = async (
 
   return response.json();
 };
+
+/**
+ * Delete a product by ID.
+ * @param id Product ID.
+ * @param token Clerk's session token.
+ */
+export const deleteProductById = async (id: string, token: string): Promise<void> => {
+  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error deleting product: ${response.statusText}`);
+  }
+};
