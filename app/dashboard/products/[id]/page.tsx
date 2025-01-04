@@ -1,7 +1,10 @@
 "use client";
 
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRouter, useParams } from "next/navigation";
+import { useSession } from "@clerk/nextjs";
 import React, { useState, useEffect } from "react";
+import { fetchProductById, updateProductById, deleteProductById, Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,8 +17,58 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 export default function EditProductPage() {
   const router = useRouter();
   const { id } = useParams();
+  const { session } = useSession();
 
-  const [formData, setFormData] = useState({
+  // Fetch product data
+  const { data: product, isLoading, error } = useQuery({
+    queryKey: ["product", id],
+    queryFn: async () => {
+      if (!session) throw new Error("No session found");
+      const token = await session.getToken();
+      if (!token) throw new Error("Token is null");
+      return fetchProductById(id as string, token);
+    },
+    enabled: !!id && !!session,
+  });
+
+  // Update product mutation
+  const updateMutation = useMutation({
+    mutationFn: async (updatedProduct: Partial<Product>) => {
+      if (!session) throw new Error("No session found");
+      const token = await session.getToken();
+      if (!token) throw new Error("Token is null");
+      return updateProductById(id as string, updatedProduct, token);
+    },
+    onSuccess: () => {
+      alert("Product updated successfully!");
+      router.push("/dashboard/products");
+    },
+    onError: (err) => {
+      console.error("Failed to save product:", err);
+      alert("Failed to save product.");
+    },
+  });
+
+  // Delete product mutation
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      if (!session) throw new Error("No session found");
+      const token = await session.getToken();
+      if (!token) throw new Error("Token is null");
+      return deleteProductById(id as string, token);
+    },
+    onSuccess: () => {
+      alert("Product deleted successfully!");
+      router.push("/dashboard/products");
+    },
+    onError: (err) => {
+      console.error("Failed to delete product:", err);
+      alert("Failed to delete product.");
+    },
+  });
+
+  // Form state
+  const [formData, setFormData] = useState<Partial<Product>>({
     name: "",
     category: "",
     description: "",
@@ -26,19 +79,10 @@ export default function EditProductPage() {
   const [newImage, setNewImage] = useState<File | null>(null);
 
   useEffect(() => {
-    // Fetch product by ID (use actual fetch logic here)
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`/api/products/${id}`);
-        const product = await response.json();
-        console.log("Fetched product:", product); // Debug log
-        setFormData(product);
-      } catch (error) {
-        console.error("Failed to fetch product:", error);
-      }
-    };
-    fetchProduct();
-  }, [id]);
+    if (product) {
+      setFormData(product);
+    }
+  }, [product]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -48,18 +92,27 @@ export default function EditProductPage() {
     }
   };
 
-  const handleSave = async () => {
-    alert("Product updated successfully!");
-    router.push("/dashboard/products");
+  const handleSave = () => {
+    updateMutation.mutate(formData);
   };
 
-  const resolvedImage = newImage
-    ? formData.image // Local image preview
-    : formData.image.startsWith
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      deleteMutation.mutate();
+    }
+  };
 
-("http") || formData.image.startsWith("/") // Check for complete or relative URLs
-    ? formData.image // Use directly if it's a valid URL
-    : `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://bos-pay-client-portal.vercel.app/dashboard"}/${formData.image}`; // Resolve relative URLs by adding a base URL.
+  if (isLoading) {
+    return <p className="text-center">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500">Error: {error.message}</p>;
+  }
+
+  if (!product) {
+    return <p className="text-center">Product not found.</p>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -76,8 +129,8 @@ export default function EditProductPage() {
         <CardHeader className="flex flex-wrap justify-between items-start gap-4">
           <CardTitle className="text-xl sm:text-2xl">Edit Product</CardTitle>
           <div className="w-32 h-32 sm:w-40 sm:h-40 relative border rounded-md overflow-hidden bg-muted">
-            {resolvedImage ? (
-              <Image src={resolvedImage} alt="Product Image" fill className="object-cover" />
+            {formData.image ? (
+              <Image src={formData.image} alt="Product Image" fill className="object-cover" />
             ) : (
               <div className="flex items-center justify-center h-full text-muted-foreground">
                 No Image
@@ -104,7 +157,6 @@ export default function EditProductPage() {
           </div>
         </CardHeader>
 
-        {/* Form Content */}
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Product Name</Label>
@@ -117,10 +169,7 @@ export default function EditProductPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Select
-              onValueChange={(value) => setFormData({ ...formData, category: value })}
-              defaultValue={formData.category}
-            >
+            <Select onValueChange={(value) => setFormData({ ...formData, category: value })} defaultValue={formData.category}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -139,8 +188,8 @@ export default function EditProductPage() {
               id="price"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-              placeholder="Enter product price"
               type="number"
+              placeholder="Enter product price"
               min="0"
               step="0.01"
             />
@@ -151,8 +200,8 @@ export default function EditProductPage() {
               id="stock"
               value={formData.stock}
               onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-              placeholder="Enter stock level"
               type="number"
+              placeholder="Enter stock level"
               min="0"
               step="1"
             />
@@ -169,12 +218,13 @@ export default function EditProductPage() {
           </div>
         </CardContent>
 
-        {/* Footer Section */}
         <CardFooter className="flex justify-between space-x-4">
-          <Button variant="ghost" onClick={() => router.push("/dashboard/products")}>
-            Cancel
+          <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
+            {deleteMutation.isPending ? "Deleting..." : "Delete"}
           </Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleSave} disabled={updateMutation.isPending}>
+            {updateMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
         </CardFooter>
       </Card>
     </div>
