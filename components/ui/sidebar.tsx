@@ -68,7 +68,7 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <div className="relative">
       {/* Sidebar Toggle Button for Mobile */}
-      {isMobile && (
+      {/* {isMobile && (
         <Button
           variant="ghost"
           size="icon"
@@ -77,7 +77,7 @@ export function Sidebar({ className }: SidebarProps) {
         >
           <ChevronRight className={isSidebarOpen ? "transform rotate-180" : ""} />
         </Button>
-      )}
+      )} */}
 
       {/* Sidebar and Backdrop */}
       <div
