@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from 'react';
-import { Sidebar } from '@/components/ui/sidebar';
-import { BreadcrumbNav } from '@/components/breadcrumb-nav';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as React from "react";
+import { Sidebar } from "@/components/ui/sidebar";
+import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function DashboardLayout({
   children,
@@ -14,9 +14,12 @@ export default function DashboardLayout({
 
   return (
     <QueryClientProvider client={queryClient.current}>
-      <div className="flex min-h-screen bg-background">
-        <Sidebar className="border-r border-border/10" />
-        <div className="flex-1 flex flex-col">
+      <div className="flex min-h-screen bg-background relative">
+        {/* Sidebar */}
+        <Sidebar className="border-r border-border/10 bg-background fixed top-0 left-0 lg:static h-full z-10" />
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col ml-[80px] lg:ml-0">
           <main className="flex-1 overflow-y-auto">
             <div className="container mx-auto p-8">
               <div className="mb-6">
@@ -25,7 +28,7 @@ export default function DashboardLayout({
               {children}
             </div>
           </main>
-          <footer className="border-t border-border/10 bg-gradient-to-r from-pacific-blue to-dark-turquoise"></footer>
+          <footer className="fixed bottom-0 left-0 right-0 z-10 h-16 bg-white shadow-md lg:relative"></footer>
         </div>
       </div>
     </QueryClientProvider>
