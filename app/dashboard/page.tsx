@@ -21,16 +21,18 @@ export default function DashboardPage() {
   const recentSales: any[] = []; // Replace with actual data when available
 
   return (
-    <div className="space-y-8 font-poppins px-4 lg:px-8 pb-8">
+    <div className="space-y-8 font-poppins px-4 sm:px-6 lg:px-8 pb-8">
       {/* Header Section */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">
             Hi, {user?.firstName || "there"}
           </h2>
-          <p className="text-white">Let&apos;s check your store today.</p>
+          <p className="text-sm sm:text-base text-white">
+            Let&apos;s check your store today.
+          </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+        <div className="flex w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search..."
@@ -49,7 +51,7 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 text-dark-turquoise" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">R0</div>
+            <div className="text-lg sm:text-2xl font-bold text-white">R0</div>
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
@@ -61,7 +63,7 @@ export default function DashboardPage() {
             <CreditCard className="h-4 w-4 text-light-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
+            <div className="text-lg sm:text-2xl font-bold text-white">0</div>
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
@@ -73,7 +75,7 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-dark-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
+            <div className="text-lg sm:text-2xl font-bold text-white">0</div>
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
@@ -85,15 +87,15 @@ export default function DashboardPage() {
             <Activity className="h-4 w-4 text-light-blue-gradient" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">R0</div>
+            <div className="text-lg sm:text-2xl font-bold text-white">R0</div>
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Sales Chart and Stock Alert */}
-      <div className="grid gap-4 lg:grid-cols-3 lg:col-span-2">
-        <div className="grid gap-4 lg:col-span-2">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2">
           <SalesChart />
         </div>
 
