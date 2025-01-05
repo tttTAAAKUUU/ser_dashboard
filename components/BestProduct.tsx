@@ -89,7 +89,7 @@ export function BestProduct() {
     <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
       {/* Header Section */}
       <CardHeader className="items-center pb-0 text-center sm:text-left">
-        <CardTitle className="text-lg sm:text-2xl font-bold">Best Performing Products</CardTitle>
+        <CardTitle className="text-base sm:text-lg font-bold">Best Performing Products</CardTitle>
         <CardDescription className="text-xs sm:text-sm text-[#05C3DE]">
           January - June 2024
         </CardDescription>
@@ -100,15 +100,15 @@ export function BestProduct() {
         {chartData.length > 0 ? (
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[200px] sm:max-h-[250px]"
+            className="mx-auto aspect-square max-h-[180px] sm:max-h-[250px]"
           >
             <ResponsiveContainer width="100%" height="100%">
               <RadialBarChart
                 data={chartData}
                 startAngle={-90}
-                endAngle={380}
-                innerRadius="20%"
-                outerRadius="80%"
+                endAngle={270}
+                innerRadius="10%"
+                outerRadius="70%"
               >
                 <ChartTooltip
                   cursor={false}
@@ -123,7 +123,7 @@ export function BestProduct() {
                     position="insideStart"
                     dataKey="browser"
                     className="fill-white capitalize"
-                    fontSize={10}
+                    fontSize={9}
                   />
                 </RadialBar>
               </RadialBarChart>
