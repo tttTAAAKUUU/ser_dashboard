@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp } from 'lucide-react';
 import {
   LabelList,
   RadialBar,
@@ -67,9 +67,9 @@ export function BestProduct() {
 
   if (isLoading) {
     return (
-      <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
-        <CardContent className="flex items-center justify-center h-48">
-          <p className="text-gray-400">Loading best products...</p>
+      <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white h-full">
+        <CardContent className="flex items-center justify-center h-full min-h-[200px] sm:min-h-[250px]">
+          <p className="text-gray-400 text-sm sm:text-base">Loading best products...</p>
         </CardContent>
       </Card>
     );
@@ -77,30 +77,30 @@ export function BestProduct() {
 
   if (error) {
     return (
-      <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
-        <CardContent className="flex items-center justify-center h-48">
-          <p className="text-red-500">Failed to load best products</p>
+      <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white h-full">
+        <CardContent className="flex items-center justify-center h-full min-h-[200px] sm:min-h-[250px]">
+          <p className="text-red-500 text-sm sm:text-base">Failed to load best products</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
+    <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white h-full">
       {/* Header Section */}
-      <CardHeader className="items-center pb-0 text-center sm:text-left">
-        <CardTitle className="text-base sm:text-lg font-bold">Best Performing Products</CardTitle>
+      <CardHeader className="items-center pb-2 sm:pb-4 text-center sm:text-left">
+        <CardTitle className="text-base sm:text-lg lg:text-xl font-bold">Best Performing Products</CardTitle>
         <CardDescription className="text-xs sm:text-sm text-[#05C3DE]">
           January - June 2024
         </CardDescription>
       </CardHeader>
 
       {/* Chart Section */}
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1 pb-2 sm:pb-4">
         {chartData.length > 0 ? (
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[180px] sm:max-h-[250px]"
+            className="mx-auto aspect-square w-full max-w-[180px] sm:max-w-[250px] lg:max-w-[300px]"
           >
             <ResponsiveContainer width="100%" height="100%">
               <RadialBarChart
@@ -130,16 +130,16 @@ export function BestProduct() {
             </ResponsiveContainer>
           </ChartContainer>
         ) : (
-          <div className="text-center text-gray-400 py-4">No products available</div>
+          <div className="text-center text-gray-400 py-4 text-sm sm:text-base">No products available</div>
         )}
       </CardContent>
 
       {/* Footer Section */}
-      <CardFooter className="flex flex-col gap-2 text-xs sm:text-sm">
+      <CardFooter className="flex flex-col gap-2 text-xs sm:text-sm pt-2 sm:pt-4">
         <div className="flex items-center gap-2 font-medium leading-none text-[#05C3DE]">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          <span className="whitespace-nowrap">Trending up by 5.2% this month</span> <TrendingUp className="h-4 w-4 flex-shrink-0" />
         </div>
-        <div className="leading-none text-[#00A3E0]">
+        <div className="leading-tight text-[#00A3E0] text-center sm:text-left">
           Showing best performing products for the last 6 months
         </div>
       </CardFooter>
@@ -148,3 +148,4 @@ export function BestProduct() {
 }
 
 export default BestProduct;
+
