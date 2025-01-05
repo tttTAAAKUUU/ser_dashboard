@@ -15,87 +15,74 @@
 
   /* Theme Colors */
   --background: 220 30% 14%; /* Midnight Express */
-  --foreground: 0 0% 98%; /* White */
-  --card: 220 35% 20%; /* Slightly lighter Midnight Express */
-  --card-foreground: 0 0% 98%; /* White */
+  --foreground: 0 0% 98%;
+  --card: 220 35% 20%; /* Slightly lighter than background */
+  --card-foreground: 0 0% 98%;
   --popover: 220 35% 20%;
-  --popover-foreground: 0 0% 98%; /* White */
+  --popover-foreground: 0 0% 98%;
   --primary: 197 100% 44%; /* Pacific Blue */
-  --primary-foreground: 0 0% 100%; /* White */
+  --primary-foreground: 0 0% 100%;
   --secondary: 189 96% 45%; /* Dark Turquoise */
-  --secondary-foreground: 0 0% 100%; /* White */
+  --secondary-foreground: 0 0% 100%;
   --muted: 220 25% 25%;
   --muted-foreground: 215 10% 75%;
   --accent: 272 71% 63%; /* Medium Purple */
-  --accent-foreground: 0 0% 100%; /* White */
-  --destructive: 0 84.2% 60.2%; /* Bright Red */
-  --destructive-foreground: 0 0% 98%; /* Almost White */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
   --border: 220 30% 25%;
   --input: 220 30% 25%;
-  --ring: 197 100% 44%; /* Pacific Blue */
-  --radius: 0.5rem; /* Rounded corners */
+  --ring: 197 100% 44%;
+  --radius: 0.5rem;
 }
 
 .dark {
-  /* Dark Theme Colors */
   --background: 220 30% 14%;
-  --foreground: 0 0% 98%; /* White */
-  --card: 220 35% 20%; /* Slightly lighter Midnight Express */
-  --card-foreground: 0 0% 98%; /* White */
-  --popover: 220 35% 20%; /* Slightly lighter Midnight Express */
-  --popover-foreground: 0 0% 98%; /* White */
-  --primary: 197 100% 44%; /* Pacific Blue */
-  --primary-foreground: 0 0% 100%; /* White */
-  --secondary: 189 96% 45%; /* Dark Turquoise */
-  --secondary-foreground: 0 0% 100%; /* White */
+  --foreground: 0 0% 98%;
+  --card: 220 35% 20%;
+  --card-foreground: 0 0% 98%;
+  --popover: 220 35% 20%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 197 100% 44%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 189 96% 45%;
+  --secondary-foreground: 0 0% 100%;
   --muted: 220 25% 25%;
   --muted-foreground: 215 10% 75%;
-  --accent: 272 71% 63%; /* Medium Purple */
-  --accent-foreground: 0 0% 100%; /* White */
-  --destructive: 0 62.8% 30.6%; /* Darker Red */
-  --destructive-foreground: 0 0% 98%; /* Almost White */
+  --accent: 272 71% 63%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
   --border: 220 30% 25%;
   --input: 220 30% 25%;
-  --ring: 197 100% 44%; /* Pacific Blue */
+  --ring: 197 100% 44%;
 }
 
 @layer base {
-  /* General Base Styles */
   * {
-    @apply border-border; /* Unified border color */
+    @apply border-border;
   }
-
-  /* Fix Overflow Issues */
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    width: 100%; /* Ensure full width */
-  }
-
   body {
-    @apply bg-background text-foreground; /* Background and text colors */
-    font-feature-settings: "rlig" 1, "calt" 1; /* Font ligatures and contextual alternates */
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    @apply font-poppins font-bold; /* Use Poppins for headings */
+    @apply font-poppins font-bold;
   }
-
   p, span, div {
-    @apply font-dm-sans; /* Use DM Sans for body text */
+    @apply font-dm-sans;
   }
 }
 
 /* Custom Gradients */
 .gradient-dark-blue {
-  @apply bg-gradient-to-r from-sapphire to-cobalt; /* Sapphire to Cobalt */
+  @apply bg-gradient-to-r from-sapphire to-cobalt;
 }
 
 .gradient-light-blue {
-  @apply bg-gradient-to-r from-pacific-blue to-dark-turquoise; /* Pacific Blue to Dark Turquoise */
+  @apply bg-gradient-to-r from-pacific-blue to-dark-turquoise;
 }
 
 .gradient-purple {
-  @apply bg-gradient-to-r from-medium-purple to-pacific-blue; /* Medium Purple to Pacific Blue */
+  @apply bg-gradient-to-r from-medium-purple to-pacific-blue;
 }
