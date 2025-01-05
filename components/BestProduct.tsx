@@ -87,23 +87,28 @@ export function BestProduct() {
 
   return (
     <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
-      <CardHeader className="items-center pb-0">
-        <CardTitle className="text-2xl font-bold">Best Performing Products</CardTitle>
-        <CardDescription className="text-[#05C3DE]">January - June 2024</CardDescription>
+      {/* Header Section */}
+      <CardHeader className="items-center pb-0 text-center sm:text-left">
+        <CardTitle className="text-lg sm:text-2xl font-bold">Best Performing Products</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-[#05C3DE]">
+          January - June 2024
+        </CardDescription>
       </CardHeader>
+
+      {/* Chart Section */}
       <CardContent className="flex-1 pb-0">
         {chartData.length > 0 ? (
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[250px]"
+            className="mx-auto aspect-square max-h-[200px] sm:max-h-[250px]"
           >
             <ResponsiveContainer width="100%" height="100%">
               <RadialBarChart
                 data={chartData}
                 startAngle={-90}
                 endAngle={380}
-                innerRadius={30}
-                outerRadius={110}
+                innerRadius="20%"
+                outerRadius="80%"
               >
                 <ChartTooltip
                   cursor={false}
@@ -118,7 +123,7 @@ export function BestProduct() {
                     position="insideStart"
                     dataKey="browser"
                     className="fill-white capitalize"
-                    fontSize={11}
+                    fontSize={10}
                   />
                 </RadialBar>
               </RadialBarChart>
@@ -128,13 +133,15 @@ export function BestProduct() {
           <div className="text-center text-gray-400 py-4">No products available</div>
         )}
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        {/* <div className="flex items-center gap-2 font-medium leading-none text-[#05C3DE]">
+
+      {/* Footer Section */}
+      <CardFooter className="flex flex-col gap-2 text-xs sm:text-sm">
+        <div className="flex items-center gap-2 font-medium leading-none text-[#05C3DE]">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div> */}
-        {/* <div className="leading-none text-[#00A3E0]">
+        </div>
+        <div className="leading-none text-[#00A3E0]">
           Showing best performing products for the last 6 months
-        </div> */}
+        </div>
       </CardFooter>
     </Card>
   );

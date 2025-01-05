@@ -76,14 +76,19 @@ export function ProductPieChart() {
 
   return (
     <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
-      <CardHeader className="items-center pb-0">
-        <CardTitle className="text-2xl font-bold">Products</CardTitle>
-        <CardDescription className="text-[#05C3DE]">January - June 2024</CardDescription>
+      {/* Header Section */}
+      <CardHeader className="items-center pb-0 text-center sm:text-left">
+        <CardTitle className="text-lg sm:text-2xl font-bold">Products</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-[#05C3DE]">
+          January - June 2024
+        </CardDescription>
       </CardHeader>
+
+      {/* Chart Section */}
       <CardContent className="flex-1 pb-0">
         {chartData.length > 0 ? (
           <ChartContainer
-            className="mx-auto aspect-square max-h-[250px] [&_.recharts-text]:fill-white"
+            className="mx-auto aspect-square max-h-[200px] sm:max-h-[250px] [&_.recharts-text]:fill-white"
             config={{ /* Add your ChartConfig properties here */ }}
           >
             <ResponsiveContainer width="100%" height="100%">
@@ -94,8 +99,8 @@ export function ProductPieChart() {
                 <Pie
                   data={chartData}
                   dataKey="visitors"
-                  outerRadius="80%"
-                  innerRadius="50%"
+                  outerRadius="70%"
+                  innerRadius="40%"
                 >
                   {chartData.map((entry, index) => (
                     <LabelList
@@ -104,7 +109,7 @@ export function ProductPieChart() {
                       position="outside"
                       fill="#ffffff"
                       stroke="none"
-                      fontSize={12}
+                      fontSize={10}
                     />
                   ))}
                 </Pie>
@@ -112,10 +117,14 @@ export function ProductPieChart() {
             </ResponsiveContainer>
           </ChartContainer>
         ) : (
-          <div className="text-center text-gray-400 py-4">No products available</div>
+          <div className="text-center text-gray-400 py-4">
+            No products available
+          </div>
         )}
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+
+      {/* Footer Section */}
+      <CardFooter className="flex flex-col gap-2 text-xs sm:text-sm">
         <div className="flex items-center gap-2 font-medium leading-none text-[#05C3DE]">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>

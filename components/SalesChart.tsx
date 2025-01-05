@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { ChartContainer, ChartConfig } from "@/components/ui/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -48,14 +55,14 @@ export default function ModernSalesChart() {
       {/* Header Section */}
       <CardHeader className="pb-4 border-b border-gray-700">
         <div>
-          <CardTitle className="text-2xl font-bold">Sales & Purchases</CardTitle>
-          <p className="text-sm text-gray-400">
+          <CardTitle className="text-lg sm:text-2xl font-bold">Sales & Purchases</CardTitle>
+          <p className="text-xs sm:text-sm text-gray-400">
             Showing total visitors for the last 3 months
           </p>
         </div>
 
         {/* Integrated Toggle Section */}
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
           <div
             className={`cursor-pointer p-2 rounded ${
               view === "desktop" ? "bg-[#003DA5] text-white" : "text-gray-400"
@@ -79,7 +86,7 @@ export default function ModernSalesChart() {
 
       {/* Chart Section */}
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="h-[200px] sm:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
               <defs>
@@ -97,7 +104,7 @@ export default function ModernSalesChart() {
                 dataKey="date"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fill: "#ffffff", fontSize: 12 }}
+                tick={{ fill: "#ffffff", fontSize: 10 }}
               />
               <Tooltip
                 contentStyle={{
