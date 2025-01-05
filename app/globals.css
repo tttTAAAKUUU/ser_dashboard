@@ -18,7 +18,7 @@
   --foreground: 0 0% 98%; /* White */
   --card: 220 35% 20%; /* Slightly lighter Midnight Express */
   --card-foreground: 0 0% 98%; /* White */
-  --popover: 220 35% 20%; /* Slightly lighter Midnight Express */
+  --popover: 220 35% 20%;
   --popover-foreground: 0 0% 98%; /* White */
   --primary: 197 100% 44%; /* Pacific Blue */
   --primary-foreground: 0 0% 100%; /* White */
@@ -63,6 +63,14 @@
   /* General Base Styles */
   * {
     @apply border-border; /* Unified border color */
+  }
+
+  /* Fix Overflow Issues */
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure full width */
   }
 
   body {
