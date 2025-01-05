@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import StockAlert from "@/components/StockAlert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, Activity, CreditCard } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import SalesChart from "@/components/SalesChart";
 import ProductPieChart from "@/components/ProductPieChart";
@@ -17,7 +16,6 @@ export default function DashboardPage() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // Simulating no recent transactions
   const recentSales: any[] = []; // Replace with actual data when available
 
   return (
@@ -43,7 +41,7 @@ export default function DashboardPage() {
 
       {/* Overview Cards */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-gradient-to-tr from-cobalt to-pacific-blue">
+        <Card className="bg-gradient-to-tr from-cobalt to-pacific-blue p-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">
               Total Revenue
@@ -55,7 +53,7 @@ export default function DashboardPage() {
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-tr from-sapphire to-dark-turquoise">
+        <Card className="bg-gradient-to-tr from-sapphire to-dark-turquoise p-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">
               Total Sales
@@ -67,7 +65,7 @@ export default function DashboardPage() {
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-tr from-pacific-blue to-dark-turquoise">
+        <Card className="bg-gradient-to-tr from-pacific-blue to-dark-turquoise p-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">
               Total Purchases
@@ -79,7 +77,7 @@ export default function DashboardPage() {
             <p className="text-xs text-dark-turquoise">0% from last month</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-tr from-medium-purple to-sapphire">
+        <Card className="bg-gradient-to-tr from-medium-purple to-sapphire p-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">
               Total Returns
@@ -104,15 +102,11 @@ export default function DashboardPage() {
 
       {/* Product Pie Chart and Best Product */}
       <div className="grid gap-4 lg:grid-cols-3">
-        {/* Product Pie Chart */}
         <div className="lg:col-span-2">
           <ProductPieChart />
         </div>
 
-        {/* Best Product */}
-        <div>
-          <BestProduct />
-        </div>
+        <BestProduct />
       </div>
 
       {/* Recent Sales Table */}
