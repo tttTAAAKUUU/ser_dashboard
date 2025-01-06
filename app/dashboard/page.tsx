@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, Activity, CreditCard } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
 import SalesChart from "@/components/SalesChart";
-// import ProductPieChart from "@/components/ProductPieChart";
+import ProductPieChart from "@/components/ProductPieChart";
 import BestProduct from "@/components/BestProduct";
 
 export default function DashboardPage() {
@@ -38,8 +38,6 @@ export default function DashboardPage() {
           />
         </div>
       </div>
-
-      {/* Overview Cards */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-gradient-to-tr from-cobalt to-pacific-blue p-3 sm:p-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
