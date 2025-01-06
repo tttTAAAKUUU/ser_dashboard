@@ -148,7 +148,7 @@ export default function StaffManagementDashboard() {
     <div className="p-4 space-y-6 max-w-full">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold flex-grow">Staff Management</h1>
+        <h1 className="text-xl sm:text-2xl font-bold flex-grow">Staff Management</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button variant="default" className="w-full sm:w-auto">
@@ -196,7 +196,7 @@ export default function StaffManagementDashboard() {
       </div>
 
       {/* Search Input */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         <Input
           type="text"
           placeholder="Search by name or email..."
@@ -207,7 +207,7 @@ export default function StaffManagementDashboard() {
       </div>
 
       {/* Staff List */}
-      <Card className="overflow-hidden md:overflow-visible">
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>Staff List</CardTitle>
         </CardHeader>
@@ -233,7 +233,7 @@ export default function StaffManagementDashboard() {
                       {member.publicUserData?.identifier ?? "N/A"}
                     </TableCell>
                     <TableCell className="capitalize">{member.role}</TableCell>
-                    <TableCell className="text-right space-x-2">
+                    <TableCell className="text-right space-y-2 sm:space-x-2 flex flex-col sm:flex-row justify-end">
                       <Button
                         size="sm"
                         variant="outline"
@@ -241,7 +241,7 @@ export default function StaffManagementDashboard() {
                           handleViewDetails(member.publicUserData?.userId ?? "")
                         }
                       >
-                        View Details
+                        View
                       </Button>
                       <Button
                         size="sm"
