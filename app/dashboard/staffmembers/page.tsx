@@ -207,7 +207,7 @@ export default function StaffManagementDashboard() {
       </div>
 
       {/* Staff List */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden max-w-full sm:max-w-screen-sm">
         <CardHeader>
           <CardTitle>Staff List</CardTitle>
         </CardHeader>
@@ -215,10 +215,12 @@ export default function StaffManagementDashboard() {
           <Table className="table-auto w-full text-sm">
             <TableHeader>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell className="text-right">Actions</TableCell>
+                <TableCell className="whitespace-nowrap">Name</TableCell>
+                <TableCell className="whitespace-nowrap">Email</TableCell>
+                <TableCell className="whitespace-nowrap">Role</TableCell>
+                <TableCell className="whitespace-nowrap text-right">
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -229,7 +231,7 @@ export default function StaffManagementDashboard() {
                       {member.publicUserData?.firstName || "N/A"}{" "}
                       {member.publicUserData?.lastName || ""}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="truncate">
                       {member.publicUserData?.identifier ?? "N/A"}
                     </TableCell>
                     <TableCell className="capitalize">{member.role}</TableCell>
