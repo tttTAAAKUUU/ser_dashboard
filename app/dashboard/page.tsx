@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, Activity, CreditCard } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
 import SalesChart from "@/components/SalesChart";
-import ProductPieChart from "@/components/ProductPieChart";
+// import ProductPieChart from "@/components/ProductPieChart";
 import BestProduct from "@/components/BestProduct";
 
 export default function DashboardPage() {
@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const recentSales: any[] = []; // Replace with actual data when available
+  const recentSales: any[] = [];
 
   return (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 font-poppins px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6 lg:pb-8">
@@ -93,9 +93,6 @@ export default function DashboardPage() {
 
       {/* Sales Chart and Stock Alert */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* <div className="md:col-span-2">
-          <SalesChart />
-        </div> */}
         <div className="md:col-span-2 lg:col-span-1">
           <StockAlert />
         </div>
@@ -103,9 +100,9 @@ export default function DashboardPage() {
 
       {/* Product Pie Chart and Best Product */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="md:col-span-2">
+        {/* <div className="md:col-span-2">
           <ProductPieChart />
-        </div>
+        </div> */}
         <div className="md:col-span-2 lg:col-span-1">
           <BestProduct />
         </div>
