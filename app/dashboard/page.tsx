@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import StockAlert from "@/components/StockAlert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, Activity, CreditCard, Search } from 'lucide-react';
@@ -12,16 +12,11 @@ import { Input } from "@/components/ui/input";
 
 export default function DashboardPage() {
   const { user } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
   const recentSales: any[] = [];
 
   return (
-    <div className="flex flex-col w-full min-h-screen bg-midnight-blue overflow-x-hidden">
-      <div className="flex-grow p-4 space-y-6 max-w-full">
+    <div className="w-full min-h-screen bg-midnight-blue">
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Header Section */}
         <div className="space-y-4">
           <div>
@@ -43,7 +38,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Overview Cards */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { title: "Total Revenue", icon: DollarSign, value: "R0", change: "0%" },
             { title: "Total Sales", icon: CreditCard, value: "0", change: "0%" },
@@ -65,18 +60,14 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Sales Chart and Stock Alert */}
-        <div className="space-y-4">
+        {/* Charts and Tables */}
+        <div className="grid gap-8 grid-cols-1 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-white">Sales Overview</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="w-full overflow-x-auto">
-                <div className="min-w-[300px]">
-                  <SalesChart />
-                </div>
-              </div>
+            <CardContent>
+              <SalesChart />
             </CardContent>
           </Card>
           <Card>
@@ -87,20 +78,12 @@ export default function DashboardPage() {
               <StockAlert />
             </CardContent>
           </Card>
-        </div>
-
-        {/* Product Pie Chart and Best Product */}
-        <div className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-white">Product Distribution</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="w-full overflow-x-auto">
-                <div className="min-w-[300px]">
-                  <ProductPieChart />
-                </div>
-              </div>
+            <CardContent>
+              <ProductPieChart />
             </CardContent>
           </Card>
           <Card>
@@ -120,35 +103,31 @@ export default function DashboardPage() {
               Recent Sales
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="w-full overflow-x-auto">
-              <div className="min-w-[600px]">
-                {recentSales.length > 0 ? (
-                  <table className="w-full text-sm text-left">
-                    <thead className="bg-white text-sapphire">
-                      <tr>
-                        <th className="py-2 px-4">Product</th>
-                        <th className="py-2 px-4">Customer</th>
-                        <th className="py-2 px-4">Price</th>
-                        <th className="py-2 px-4">Payment</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recentSales.map((sale, index) => (
-                        <tr key={index} className="border-t">
-                          <td className="py-2 px-4">{sale.product}</td>
-                          <td className="py-2 px-4">{sale.customer}</td>
-                          <td className="py-2 px-4">R{sale.price}</td>
-                          <td className="py-2 px-4 text-dark-turquoise">{sale.payment}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p className="text-white text-center py-4">No recent transactions</p>
-                )}
-              </div>
-            </div>
+          <CardContent className="overflow-x-auto">
+            {recentSales.length > 0 ? (
+              <table className="w-full text-sm text-left">
+                <thead className="bg-white text-sapphire">
+                  <tr>
+                    <th className="py-2 px-4">Product</th>
+                    <th className="py-2 px-4">Customer</th>
+                    <th className="py-2 px-4">Price</th>
+                    <th className="py-2 px-4">Payment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentSales.map((sale, index) => (
+                    <tr key={index} className="border-t">
+                      <td className="py-2 px-4">{sale.product}</td>
+                      <td className="py-2 px-4">{sale.customer}</td>
+                      <td className="py-2 px-4">R{sale.price}</td>
+                      <td className="py-2 px-4 text-dark-turquoise">{sale.payment}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-white text-center py-4">No recent transactions</p>
+            )}
           </CardContent>
         </Card>
       </div>
