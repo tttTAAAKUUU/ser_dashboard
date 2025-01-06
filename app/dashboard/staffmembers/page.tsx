@@ -145,17 +145,17 @@ export default function StaffManagementDashboard() {
   }
 
   return (
-    <div className="p-4 space-y-6 max-w-full">
+    <div className="p-4 space-y-6 w-full max-w-4xl mx-auto">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-xl sm:text-2xl font-bold flex-grow">Staff Management</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Staff Management</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button variant="default" className="w-full sm:w-auto">
               + Add Staff Member
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Invite New Members</DialogTitle>
             </DialogHeader>
@@ -196,78 +196,77 @@ export default function StaffManagementDashboard() {
       </div>
 
       {/* Search Input */}
-      <div className="flex flex-col sm:flex-row items-center gap-4">
+      <div className="w-full">
         <Input
           type="text"
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="h-10 w-full sm:w-72 rounded-lg border px-4 text-sm shadow-sm focus:ring focus:ring-blue-200"
+          className="w-full max-w-md"
         />
       </div>
 
       {/* Staff List */}
-      <Card className="overflow-hidden max-w-full sm:max-w-screen-sm">
+      <Card className="w-full overflow-hidden">
         <CardHeader>
           <CardTitle>Staff List</CardTitle>
         </CardHeader>
-        <CardContent className="overflow-x-auto">
-          <Table className="table-auto w-full text-sm">
-            <TableHeader>
-              <TableRow>
-                <TableCell className="whitespace-nowrap">Name</TableCell>
-                <TableCell className="whitespace-nowrap">Email</TableCell>
-                <TableCell className="whitespace-nowrap">Role</TableCell>
-                <TableCell className="whitespace-nowrap text-right">
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredMembers.length > 0 ? (
-                filteredMembers.map((member) => (
-                  <TableRow key={member.id}>
-                    <TableCell>
-                      {member.publicUserData?.firstName || "N/A"}{" "}
-                      {member.publicUserData?.lastName || ""}
-                    </TableCell>
-                    <TableCell className="truncate">
-                      {member.publicUserData?.identifier ?? "N/A"}
-                    </TableCell>
-                    <TableCell className="capitalize">{member.role}</TableCell>
-                    <TableCell className="text-right space-y-2 sm:space-x-2 flex flex-col sm:flex-row justify-end">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          handleViewDetails(member.publicUserData?.userId ?? "")
-                        }
-                      >
-                        View
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() =>
-                          handleRemoveMember(member.id, member.role)
-                        }
-                      >
-                        Remove
-                      </Button>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[200px]">Name</TableHead>
+                  <TableHead className="w-[200px]">Email</TableHead>
+                  <TableHead className="w-[100px]">Role</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredMembers.length > 0 ? (
+                  filteredMembers.map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell className="font-medium">
+                        {member.publicUserData?.firstName || "N/A"}{" "}
+                        {member.publicUserData?.lastName || ""}
+                      </TableCell>
+                      <TableCell>{member.publicUserData?.identifier ?? "N/A"}</TableCell>
+                      <TableCell className="capitalize">{member.role}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() =>
+                              handleViewDetails(member.publicUserData?.userId ?? "")
+                            }
+                          >
+                            View
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleRemoveMember(member.id, member.role)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center">
+                      No members found.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} className="text-center">
-                    No members found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
+
