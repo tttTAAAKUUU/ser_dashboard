@@ -8,17 +8,10 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -145,10 +138,9 @@ export default function StaffManagementDashboard() {
   }
 
   return (
-    <div className="p-4 space-y-6 w-full max-w-full overflow-x-hidden">
-      {/* Header Section */}
-      <div className="flex flex-col items-start gap-4">
-        <h1 className="text-xl sm:text-2xl font-bold">Staff Management</h1>
+    <div className="p-4 space-y-6 w-full max-w-full">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Staff Management</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button variant="default" className="w-full sm:w-auto">
@@ -195,7 +187,6 @@ export default function StaffManagementDashboard() {
         </Dialog>
       </div>
 
-      {/* Search Input */}
       <div className="w-full">
         <Input
           type="text"
@@ -206,66 +197,48 @@ export default function StaffManagementDashboard() {
         />
       </div>
 
-      {/* Staff List */}
-      <Card className="w-full overflow-hidden">
-        <CardHeader>
-          <CardTitle>Staff List</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto sm:overflow-x-visible">
-            <Table className="w-full">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[30%]">Name</TableHead>
-                  <TableHead className="w-[30%]">Email</TableHead>
-                  <TableHead className="w-[20%]">Role</TableHead>
-                  <TableHead className="w-[20%]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredMembers.length > 0 ? (
-                  filteredMembers.map((member) => (
-                    <TableRow key={member.id}>
-                      <TableCell className="font-medium break-words">
-                        {member.publicUserData?.firstName || "N/A"}{" "}
-                        {member.publicUserData?.lastName || ""}
-                      </TableCell>
-                      <TableCell className="break-words">{member.publicUserData?.identifier ?? "N/A"}</TableCell>
-                      <TableCell className="capitalize">{member.role}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              handleViewDetails(member.publicUserData?.userId ?? "")
-                            }
-                          >
-                            View
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => handleRemoveMember(member.id, member.role)}
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center">
-                      No members found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {filteredMembers.length > 0 ? (
+          filteredMembers.map((member) => (
+            <Card key={member.id} className="w-full">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {member.publicUserData?.firstName || "N/A"}{" "}
+                  {member.publicUserData?.lastName || ""}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-500 break-words">
+                  {member.publicUserData?.identifier ?? "N/A"}
+                </p>
+                <p className="text-sm font-medium mt-2 capitalize">
+                  Role: {member.role}
+                </p>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleViewDetails(member.publicUserData?.userId ?? "")}
+                >
+                  View
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => handleRemoveMember(member.id, member.role)}
+                >
+                  Remove
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-4">
+            No members found.
           </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 }
