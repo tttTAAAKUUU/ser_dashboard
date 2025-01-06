@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 
-
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -20,15 +19,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
-
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} overflow-x-hidden`}>
         <ClerkProvider>
-            <ThemeProvider>
+          <ThemeProvider>
+            <div className="container max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
               {children}
-            </ThemeProvider>
+            </div>
+          </ThemeProvider>
         </ClerkProvider>
       </body>
     </html>
