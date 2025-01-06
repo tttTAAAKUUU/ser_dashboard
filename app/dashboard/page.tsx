@@ -20,9 +20,9 @@ export default function DashboardPage() {
   const recentSales: any[] = [];
 
   return (
-    <div className="space-y-4 font-poppins p-4 max-w-7xl mx-auto">
+    <div className="p-4 space-y-6 max-w-full overflow-x-hidden">
       {/* Header Section */}
-      <div className="flex flex-col gap-4">
+      <div className="space-y-4">
         <div>
           <h2 className="text-xl font-bold text-white">
             Hi, {user?.firstName || "there"}
@@ -42,7 +42,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         {[
           { title: "Total Revenue", icon: DollarSign, value: "R0", change: "0%" },
           { title: "Total Sales", icon: CreditCard, value: "0", change: "0%" },
@@ -65,8 +65,8 @@ export default function DashboardPage() {
       </div>
 
       {/* Sales Chart and Stock Alert */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="md:col-span-2">
+      <div className="space-y-4">
+        <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-white">Sales Overview</CardTitle>
           </CardHeader>
@@ -85,7 +85,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Product Pie Chart and Best Product */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="space-y-4">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-white">Product Distribution</CardTitle>
@@ -117,19 +117,19 @@ export default function DashboardPage() {
               <table className="w-full text-sm text-left">
                 <thead className="bg-white text-sapphire">
                   <tr>
-                    <th className="py-2 px-4">Product</th>
-                    <th className="py-2 px-4">Customer</th>
-                    <th className="py-2 px-4">Price</th>
-                    <th className="py-2 px-4">Payment</th>
+                    <th className="py-2 px-2">Product</th>
+                    <th className="py-2 px-2">Customer</th>
+                    <th className="py-2 px-2">Price</th>
+                    <th className="py-2 px-2">Payment</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentSales.map((sale, index) => (
                     <tr key={index} className="border-t">
-                      <td className="py-2 px-4">{sale.product}</td>
-                      <td className="py-2 px-4">{sale.customer}</td>
-                      <td className="py-2 px-4">R{sale.price}</td>
-                      <td className="py-2 px-4 text-dark-turquoise">{sale.payment}</td>
+                      <td className="py-2 px-2">{sale.product}</td>
+                      <td className="py-2 px-2">{sale.customer}</td>
+                      <td className="py-2 px-2">R{sale.price}</td>
+                      <td className="py-2 px-2 text-dark-turquoise">{sale.payment}</td>
                     </tr>
                   ))}
                 </tbody>
