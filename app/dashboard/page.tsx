@@ -7,7 +7,7 @@ import { Users, DollarSign, Activity, CreditCard } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
 import SalesChart from "@/components/SalesChart";
 import ProductPieChart from "@/components/ProductPieChart";
-// import BestProduct from "@/components/BestProduct";
+import BestProduct from "@/components/BestProduct";
 
 export default function DashboardPage() {
   const { user } = useUser();
