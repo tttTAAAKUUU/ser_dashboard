@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import StockAlert from "@/components/StockAlert";
+// import StockAlert from "@/components/StockAlert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, Activity, CreditCard } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
@@ -91,9 +91,9 @@ export default function DashboardPage() {
 
       {/* Sales Chart and Stock Alert */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="md:col-span-2 lg:col-span-1">
+        {/* <div className="md:col-span-2 lg:col-span-1">
           <StockAlert />
-        </div>
+        </div> */}
       </div>
 
       {/* Product Pie Chart and Best Product */}
