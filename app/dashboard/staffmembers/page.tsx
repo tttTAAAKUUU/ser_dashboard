@@ -145,9 +145,9 @@ export default function StaffManagementDashboard() {
   }
 
   return (
-    <div className="p-4 space-y-6 w-full max-w-4xl mx-auto">
+    <div className="p-4 space-y-6 w-full max-w-full overflow-x-hidden">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col items-start gap-4">
         <h1 className="text-xl sm:text-2xl font-bold">Staff Management</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -202,7 +202,7 @@ export default function StaffManagementDashboard() {
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-md"
+          className="w-full"
         />
       </div>
 
@@ -212,28 +212,28 @@ export default function StaffManagementDashboard() {
           <CardTitle>Staff List</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto sm:overflow-x-visible">
+            <Table className="w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[200px]">Name</TableHead>
-                  <TableHead className="w-[200px]">Email</TableHead>
-                  <TableHead className="w-[100px]">Role</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="w-[30%]">Name</TableHead>
+                  <TableHead className="w-[30%]">Email</TableHead>
+                  <TableHead className="w-[20%]">Role</TableHead>
+                  <TableHead className="w-[20%]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredMembers.length > 0 ? (
                   filteredMembers.map((member) => (
                     <TableRow key={member.id}>
-                      <TableCell className="font-medium">
+                      <TableCell className="font-medium break-words">
                         {member.publicUserData?.firstName || "N/A"}{" "}
                         {member.publicUserData?.lastName || ""}
                       </TableCell>
-                      <TableCell>{member.publicUserData?.identifier ?? "N/A"}</TableCell>
+                      <TableCell className="break-words">{member.publicUserData?.identifier ?? "N/A"}</TableCell>
                       <TableCell className="capitalize">{member.role}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                      <TableCell>
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <Button
                             size="sm"
                             variant="outline"
