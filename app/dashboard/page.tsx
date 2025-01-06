@@ -7,7 +7,7 @@ import { Users, DollarSign, Activity, CreditCard } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
 import SalesChart from "@/components/SalesChart";
 import ProductPieChart from "@/components/ProductPieChart";
-import BestProduct from "@/components/BestProduct";
+// import BestProduct from "@/components/BestProduct";
 
 export default function DashboardPage() {
   const { user } = useUser();
@@ -101,9 +101,9 @@ export default function DashboardPage() {
         {/* <div className="md:col-span-2">
           <ProductPieChart />
         </div> */}
-        <div className="md:col-span-2 lg:col-span-1">
+        {/* <div className="md:col-span-2 lg:col-span-1">
           <BestProduct />
-        </div>
+        </div> */}
       </div>
 
       {/* Recent Sales Table */}
