@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -127,29 +127,29 @@ export default function EditProductPage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 py-4 sm:py-8"
     >
       <Button
         variant="ghost"
-        className="mb-6 flex items-center gap-2 hover:bg-pacific-blue/10"
+        className="mb-4 sm:mb-6 flex items-center gap-2 hover:bg-pacific-blue/10"
         onClick={() => router.push("/dashboard/products")}
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Products
+        <span className="hidden sm:inline">Back to Products</span>
       </Button>
 
-      <Card className="w-full max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl">
-        <CardHeader className="border-b border-gray-700 pb-6">
-          <CardTitle className="text-2xl sm:text-3xl font-bold text-white">Edit Product</CardTitle>
+      <Card className="w-full max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl overflow-hidden">
+        <CardHeader className="border-b border-gray-700 pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Edit Product</CardTitle>
         </CardHeader>
 
         <Tabs defaultValue="details" className="w-full">
-          <TabsList className="w-full justify-start bg-gray-800 border-b border-gray-700">
+          <TabsList className="w-full justify-start bg-gray-800 border-b border-gray-700 overflow-x-auto flex-nowrap">
             <TabsTrigger value="details" className="text-gray-300 data-[state=active]:text-pacific-blue">Details</TabsTrigger>
             <TabsTrigger value="inventory" className="text-gray-300 data-[state=active]:text-pacific-blue">Inventory</TabsTrigger>
           </TabsList>
           <TabsContent value="details">
-            <CardContent className="space-y-6 pt-6">
+            <CardContent className="space-y-4 sm:space-y-6 pt-4 sm:pt-6">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-gray-300">Product Name</Label>
                 <Input
@@ -192,7 +192,7 @@ export default function EditProductPage() {
             </CardContent>
           </TabsContent>
           <TabsContent value="inventory">
-            <CardContent className="space-y-6 pt-6">
+            <CardContent className="space-y-4 sm:space-y-6 pt-4 sm:pt-6">
               <div className="space-y-2">
                 <Label htmlFor="price" className="text-gray-300">Price (R)</Label>
                 <Input
@@ -223,12 +223,12 @@ export default function EditProductPage() {
           </TabsContent>
         </Tabs>
 
-        <CardFooter className="flex justify-between space-x-4 border-t border-gray-700 pt-6">
+        <CardFooter className="flex flex-col sm:flex-row justify-between sm:space-x-4 space-y-4 sm:space-y-0 border-t border-gray-700 pt-4 sm:pt-6">
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
           >
             <Trash2 className="w-4 h-4 mr-2" />
             {deleteMutation.isPending ? "Deleting..." : "Delete"}
@@ -236,7 +236,7 @@ export default function EditProductPage() {
           <Button
             onClick={handleSave}
             disabled={updateMutation.isPending}
-            className="bg-pacific-blue hover:bg-cobalt"
+            className="bg-pacific-blue hover:bg-cobalt w-full sm:w-auto"
           >
             {updateMutation.isPending ? "Saving..." : "Save Changes"}
           </Button>
@@ -245,8 +245,8 @@ export default function EditProductPage() {
 
       {showSuccessAlert && (
         <Alert className="max-w-md mx-auto mt-4 bg-green-600 text-white">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>
+          <AlertTitle className="text-sm sm:text-base">Success</AlertTitle>
+          <AlertDescription className="text-sm sm:text-base">
             {updateMutation.isSuccess ? "Product updated successfully!" : "Product deleted successfully!"}
           </AlertDescription>
         </Alert>
@@ -254,8 +254,8 @@ export default function EditProductPage() {
 
       {showErrorAlert && (
         <Alert variant="destructive" className="max-w-md mx-auto mt-4">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
+          <AlertTitle className="text-sm sm:text-base">Error</AlertTitle>
+          <AlertDescription className="text-sm sm:text-base">
             {updateMutation.isError ? "Failed to update product." : "Failed to delete product."}
           </AlertDescription>
         </Alert>
@@ -263,3 +263,4 @@ export default function EditProductPage() {
     </motion.div>
   );
 }
+

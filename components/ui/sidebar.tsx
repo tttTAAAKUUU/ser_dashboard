@@ -1,7 +1,7 @@
-import { useUser, OrganizationSwitcher } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
+import { useUser, OrganizationSwitcher, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,7 +17,6 @@ import {
   LogOut,
   Building,
 } from "lucide-react";
-import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -26,6 +25,7 @@ export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const { user } = useUser();
 
@@ -151,26 +151,46 @@ export function Sidebar({ className }: SidebarProps) {
           ))}
 
           {/* Logout Button */}
-          <SignOutButton redirectUrl="/sign-in">
-            <Button
-              variant="ghost"
-              className={cn(
-                "w-full justify-start rounded-md transition-all hover:bg-gray-700",
-                isCollapsed ? "px-2 py-3" : "px-3 py-2"
-              )}
-            >
-              <LogOut
-                className={cn(
-                  "h-5 w-5 text-gray-400 transition-colors group-hover:text-gray-100"
-                )}
-              />
-              {!isCollapsed && (
-                <span className="ml-3 font-medium group-hover:text-gray-100">Logout</span>
-              )}
-            </Button>
-          </SignOutButton>
+          <Button
+            variant="ghost"
+            className={cn(
+              "w-full justify-start rounded-md transition-all hover:bg-gray-700",
+              isCollapsed ? "px-2 py-3" : "px-3 py-2"
+            )}
+            onClick={() => setShowLogoutModal(true)}
+          >
+            <LogOut
+              className="h-5 w-5 text-gray-400 transition-colors group-hover:text-gray-100"
+            />
+            {!isCollapsed && (
+              <span className="ml-3 font-medium group-hover:text-gray-100">Logout</span>
+            )}
+          </Button>
         </div>
       </ScrollArea>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-background rounded-lg p-6 shadow-lg w-96 text-center">
+            <h2 className="text-lg font-medium text-gray-200 mb-4">Are you sure?</h2>
+            <p className="text-sm text-gray-200 mb-6">
+              You are about to log out. Make sure you’ve saved your work.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button
+                variant="secondary"
+                onClick={() => setShowLogoutModal(false)}
+              >
+                Cancel
+              </Button>
+              <SignOutButton>
+                <Button variant="destructive">Logout</Button>
+              </SignOutButton>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* User Profile Section */}
       <div
