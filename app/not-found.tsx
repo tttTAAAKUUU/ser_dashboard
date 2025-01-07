@@ -17,10 +17,10 @@ export default function NotFound() {
           <div className="relative">
             <CloudOff className="w-24 h-24 mx-auto text-gray-400 mb-4 animate-bounce" />
             <h1 className="text-7xl font-bold text-gray-100 mb-4">404</h1>
-            <p className="text-2xl text-gray-300 mb-8">Oops! Page not found</p>
+            <p className="text-2xl text-gray-400 mb-8">Oops! Page not found</p>
             <div className="flex items-center justify-center space-x-4 mb-8">
               <Frown className="w-6 h-6 text-yellow-500 animate-pulse" />
-              <p className="text-gray-600">We couldn&apos;t find the page you&apos;re looking for</p>
+              <p className="text-gray-400">We couldn&apos;t find the page you&apos;re looking for</p>
             </div>
             <Link 
               href="/" 
