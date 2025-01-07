@@ -15,8 +15,8 @@ export default function NotFound() {
 
           {/* Content */}
           <div className="relative">
-            <CloudOff className="w-24 h-24 mx-auto text-gray-400 mb-4 animate-bounce" />
-            <h1 className="text-7xl font-bold text-gray-100 mb-4">404</h1>
+            <CloudOff className="w-24 h-24 mx-auto text-gray-200 mb-4 animate-bounce" />
+            <h1 className="text-7xl font-bold text-gray-200 mb-4">404</h1>
             <p className="text-2xl text-gray-400 mb-8">Oops! Page not found</p>
             <div className="flex items-center justify-center space-x-4 mb-8">
               <Frown className="w-6 h-6 text-yellow-500 animate-pulse" />
