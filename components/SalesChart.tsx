@@ -44,7 +44,7 @@ const SalesChart = () => {
               />
               <Line
                 type="stepAfter"
-                dataKey="currentMonth"
+                dataKey="ThisMonth"
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ r: 1 }}
@@ -52,7 +52,7 @@ const SalesChart = () => {
               />
               <Line
                 type="stepAfter"
-                dataKey="previousMonth"
+                dataKey="LastMonth"
                 stroke="#f97316"
                 strokeWidth={2}
                 dot={{ r: 1 }}
