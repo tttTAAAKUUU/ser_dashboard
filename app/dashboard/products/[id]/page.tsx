@@ -4,14 +4,31 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "@clerk/nextjs";
 import React, { useState, useEffect } from "react";
-import { fetchProductById, updateProductById, deleteProductById, Product } from "@/data/products";
+import {
+  fetchProductById,
+  updateProductById,
+  deleteProductById,
+  Product,
+} from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, Trash2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion } from "framer-motion";
@@ -81,7 +98,7 @@ export default function EditProductPage() {
     if (product) {
       setFormData(product);
       if (product.category) {
-        setCategories([product.category]); // Assuming `category` is a single string
+        setCategories([product.category]);
       }
     }
   }, [product]);
@@ -138,32 +155,52 @@ export default function EditProductPage() {
         <span className="hidden sm:inline">Back to Products</span>
       </Button>
 
-      <Card className="w-full max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl overflow-hidden">
+      <Card className="w-full sm:max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl overflow-hidden">
         <CardHeader className="border-b border-gray-700 pb-4 sm:pb-6">
-          <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Edit Product</CardTitle>
+          <CardTitle className="text-lg sm:text-2xl font-bold text-white">
+            Edit Product
+          </CardTitle>
         </CardHeader>
 
         <Tabs defaultValue="details" className="w-full">
-          <TabsList className="w-full justify-start bg-gray-800 border-b border-gray-700 overflow-x-auto flex-nowrap">
-            <TabsTrigger value="details" className="text-gray-300 data-[state=active]:text-pacific-blue">Details</TabsTrigger>
-            <TabsTrigger value="inventory" className="text-gray-300 data-[state=active]:text-pacific-blue">Inventory</TabsTrigger>
+          <TabsList className="w-full flex-nowrap overflow-x-auto bg-gray-800 border-b border-gray-700">
+            <TabsTrigger
+              value="details"
+              className="text-gray-300 data-[state=active]:text-pacific-blue"
+            >
+              Details
+            </TabsTrigger>
+            <TabsTrigger
+              value="inventory"
+              className="text-gray-300 data-[state=active]:text-pacific-blue"
+            >
+              Inventory
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="details">
-            <CardContent className="space-y-4 sm:space-y-6 pt-4 sm:pt-6">
+            <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-gray-300">Product Name</Label>
+                <Label htmlFor="name" className="text-gray-300">
+                  Product Name
+                </Label>
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Enter product name"
                   className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="category" className="text-gray-300">Category</Label>
+                <Label htmlFor="category" className="text-gray-300">
+                  Category
+                </Label>
                 <Select
-                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, category: value })
+                  }
                   defaultValue={formData.category}
                 >
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
@@ -179,11 +216,15 @@ export default function EditProductPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-gray-300">Description</Label>
+                <Label htmlFor="description" className="text-gray-300">
+                  Description
+                </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Enter product description"
                   rows={4}
                   className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
@@ -192,13 +233,17 @@ export default function EditProductPage() {
             </CardContent>
           </TabsContent>
           <TabsContent value="inventory">
-            <CardContent className="space-y-4 sm:space-y-6 pt-4 sm:pt-6">
+            <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
               <div className="space-y-2">
-                <Label htmlFor="price" className="text-gray-300">Price (R)</Label>
+                <Label htmlFor="price" className="text-gray-300">
+                  Price (R)
+                </Label>
                 <Input
                   id="price"
                   value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: Number(e.target.value) })
+                  }
                   type="number"
                   placeholder="Enter product price"
                   min="0"
@@ -207,11 +252,15 @@ export default function EditProductPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="stock" className="text-gray-300">Stock Level</Label>
+                <Label htmlFor="stock" className="text-gray-300">
+                  Stock Level
+                </Label>
                 <Input
                   id="stock"
                   value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, stock: Number(e.target.value) })
+                  }
                   type="number"
                   placeholder="Enter stock level"
                   min="0"
@@ -223,7 +272,7 @@ export default function EditProductPage() {
           </TabsContent>
         </Tabs>
 
-        <CardFooter className="flex flex-col sm:flex-row justify-between sm:space-x-4 space-y-4 sm:space-y-0 border-t border-gray-700 pt-4 sm:pt-6">
+        <CardFooter className="flex flex-col sm:flex-row justify-between sm:space-x-4 space-y-4 sm:space-y-0">
           <Button
             variant="destructive"
             onClick={handleDelete}
@@ -247,7 +296,9 @@ export default function EditProductPage() {
         <Alert className="max-w-md mx-auto mt-4 bg-green-600 text-white">
           <AlertTitle className="text-sm sm:text-base">Success</AlertTitle>
           <AlertDescription className="text-sm sm:text-base">
-            {updateMutation.isSuccess ? "Product updated successfully!" : "Product deleted successfully!"}
+            {updateMutation.isSuccess
+              ? "Product updated successfully!"
+              : "Product deleted successfully!"}
           </AlertDescription>
         </Alert>
       )}
@@ -256,11 +307,12 @@ export default function EditProductPage() {
         <Alert variant="destructive" className="max-w-md mx-auto mt-4">
           <AlertTitle className="text-sm sm:text-base">Error</AlertTitle>
           <AlertDescription className="text-sm sm:text-base">
-            {updateMutation.isError ? "Failed to update product." : "Failed to delete product."}
+            {updateMutation.isError
+              ? "Failed to update product."
+              : "Failed to delete product."}
           </AlertDescription>
         </Alert>
       )}
     </motion.div>
   );
 }
-
