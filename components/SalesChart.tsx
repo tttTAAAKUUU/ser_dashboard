@@ -48,7 +48,7 @@ const SalesChart = () => {
                 stroke="#a45ee5"
                 strokeWidth={2}
                 dot={{ r: 1 }}
-                activeDot={{ r: 3 }}
+                activeDot={{ r: 6 }}
               />
               <Line
                 type="stepAfter"
@@ -56,7 +56,7 @@ const SalesChart = () => {
                 stroke="#003DA5"
                 strokeWidth={2}
                 dot={{ r: 1 }}
-                activeDot={{ r: 3 }}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ResponsiveContainer>
