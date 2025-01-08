@@ -11,26 +11,7 @@ const SalesChart = () => {
     previousMonth: i > 20 ? 6000 : 500,  // Orange line data
   }));
 
-  const metrics = [
-    {
-      title: 'Gross sales',
-      value: 'R 5 750.00',
-      change: 'R -600.00',
-      isNegative: true
-    },
-    {
-      title: 'Number of sales',
-      value: '6',
-      change: '-2',
-      isNegative: true
-    },
-    {
-      title: 'Average sale',
-      value: 'R 908.33',
-      change: '+R 152.00',
-      isNegative: false
-    }
-  ];
+
 
   return (
     <Card className="w-full p-6">
@@ -56,7 +37,7 @@ const SalesChart = () => {
       <div className="mt-4">
         <div className="flex items-center gap-6 mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-blue-500"></div>
+            <div className="w-3 h-0.5 "></div>
             <span className="text-sm text-gray-600">Current month</span>
           </div>
           <div className="flex items-center gap-2">
@@ -68,7 +49,7 @@ const SalesChart = () => {
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dailyData}>
-              <XAxis 
+              <XAxis
                 dataKey="day"
                 tickLine={false}
                 axisLine={false}
