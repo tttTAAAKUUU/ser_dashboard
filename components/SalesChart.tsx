@@ -7,8 +7,8 @@ const SalesChart = () => {
   // Sample data structure
   const dailyData = Array.from({ length: 31 }, (_, i) => ({
     day: i + 1,
-    currentMonth: i < 8 ? 5750 : 0,  // Blue line data
-    previousMonth: i > 20 ? 6000 : 500,  // Orange line data
+    thisMonth: i < 8 ? 5750 : 0,  // Blue line data
+    lastMonth: i > 20 ? 6000 : 500,  // Orange line data
   }));
 
 
@@ -44,19 +44,19 @@ const SalesChart = () => {
               />
               <Line
                 type="stepAfter"
-                dataKey="ThisMonth"
+                dataKey="thisMonth"
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ r: 1 }}
-                activeDot={{ r: 5 }}
+                activeDot={{ r: 3 }}
               />
               <Line
                 type="stepAfter"
-                dataKey="LastMonth"
+                dataKey="lastMonth"
                 stroke="#f97316"
                 strokeWidth={2}
                 dot={{ r: 1 }}
-                activeDot={{ r: 5 }}
+                activeDot={{ r: 3 }}
               />
             </LineChart>
           </ResponsiveContainer>
