@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { ChartContainer, ChartConfig } from "@/components/ui/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const chartData = [
   { date: "Apr 1", desktop: 520, mobile: 430 },
@@ -46,13 +47,30 @@ const chartConfig = {
 
 export default function ModernSalesChart() {
   const [view, setView] = useState<"desktop" | "mobile">("desktop");
+  const isSmallScreen = useMediaQuery("(max-width: 640px)");
 
   const totalDesktop = chartData.reduce((sum, entry) => sum + entry.desktop, 0);
   const totalMobile = chartData.reduce((sum, entry) => sum + entry.mobile, 0);
 
+  const processedChartData = useMemo(() => {
+    if (isSmallScreen) {
+      // Group data by week for small screens
+      const weeklyData = chartData.reduce((acc, entry, index) => {
+        const weekIndex = Math.floor(index / 7);
+        if (!acc[weekIndex]) {
+          acc[weekIndex] = { date: `Week ${weekIndex + 1}`, desktop: 0, mobile: 0 };
+        }
+        acc[weekIndex].desktop += entry.desktop;
+        acc[weekIndex].mobile += entry.mobile;
+        return acc;
+      }, [] as typeof chartData);
+      return weeklyData;
+    }
+    return chartData;
+  }, [isSmallScreen]);
+
   return (
     <Card className="w-full bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
-      {/* Header Section */}
       <CardHeader className="pb-4 border-b border-gray-700">
         <div>
           <CardTitle className="text-lg sm:text-2xl font-bold">Sales & Purchases</CardTitle>
@@ -61,7 +79,6 @@ export default function ModernSalesChart() {
           </p>
         </div>
 
-        {/* Integrated Toggle Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
           <div
             className={`cursor-pointer p-2 rounded ${
@@ -84,11 +101,10 @@ export default function ModernSalesChart() {
         </div>
       </CardHeader>
 
-      {/* Chart Section */}
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[200px] sm:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
+            <BarChart data={processedChartData}>
               <defs>
                 <linearGradient id="colorDesktop" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#003DA5" stopOpacity={0.8} />
@@ -105,6 +121,10 @@ export default function ModernSalesChart() {
                 tickLine={false}
                 axisLine={false}
                 tick={{ fill: "#ffffff", fontSize: 10 }}
+                interval={isSmallScreen ? 0 : "preserveStartEnd"}
+                angle={isSmallScreen ? -45 : 0}
+                textAnchor={isSmallScreen ? "end" : "middle"}
+                height={50}
               />
               <Tooltip
                 contentStyle={{
@@ -125,3 +145,4 @@ export default function ModernSalesChart() {
     </Card>
   );
 }
+

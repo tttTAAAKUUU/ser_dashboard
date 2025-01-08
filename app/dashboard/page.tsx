@@ -91,10 +91,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Sales Chart and Stock Alert */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="md:col-span-2 lg:col-span-1">
-          <StockAlert />
+      <div className="grid gap-4 lg:grid-cols-3 lg:col-span-2">
+        <div className="grid gap-4 lg:col-span-2">
+          <SalesChart />
         </div>
+
+        <StockAlert />
       </div>
 
       {/* Product Pie Chart and Best Product */}
