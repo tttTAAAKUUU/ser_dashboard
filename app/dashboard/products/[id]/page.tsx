@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -32,6 +32,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -116,14 +117,14 @@ export default function EditProductPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-pacific-blue"></div>
+        <div className="animate-spin rounded-full h-16 w-16 sm:h-32 sm:w-32 border-t-2 border-b-2 border-pacific-blue"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <Alert variant="destructive" className="max-w-md mx-auto mt-8">
+      <Alert variant="destructive" className="max-w-md mx-auto mt-4 text-sm sm:text-base">
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>{error.message}</AlertDescription>
       </Alert>
@@ -132,7 +133,7 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <Alert variant="destructive" className="max-w-md mx-auto mt-8">
+      <Alert variant="destructive" className="max-w-md mx-auto mt-4 text-sm sm:text-base">
         <AlertTitle>Not Found</AlertTitle>
         <AlertDescription>Product not found.</AlertDescription>
       </Alert>
@@ -144,26 +145,26 @@ export default function EditProductPage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto px-4 py-4 sm:py-8"
+      className="container mx-auto px-2 sm:px-4 py-2 sm:py-8"
     >
       <Button
         variant="ghost"
-        className="mb-4 sm:mb-6 flex items-center gap-2 hover:bg-pacific-blue/10"
+        className="mb-2 sm:mb-6 flex items-center gap-2 hover:bg-pacific-blue/10"
         onClick={() => router.push("/dashboard/products")}
       >
         <ArrowLeft className="h-4 w-4" />
         <span className="hidden sm:inline">Back to Products</span>
       </Button>
 
-      <Card className="w-full sm:max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl overflow-hidden">
-        <CardHeader className="border-b border-gray-700 pb-4 sm:pb-6">
+      <Card className="w-full max-w-full sm:max-w-3xl mx-auto bg-gray-800 border-gray-700 shadow-xl overflow-hidden">
+        <CardHeader className="border-b border-gray-700 p-3 sm:p-6">
           <CardTitle className="text-lg sm:text-2xl font-bold text-white">
             Edit Product
           </CardTitle>
         </CardHeader>
 
         <Tabs defaultValue="details" className="w-full">
-          <TabsList className="w-full flex-nowrap overflow-x-auto bg-gray-800 border-b border-gray-700">
+          <TabsList className="w-full flex-nowrap overflow-x-auto bg-gray-800 border-b border-gray-700 p-1 sm:p-2">
             <TabsTrigger
               value="details"
               className="text-gray-300 data-[state=active]:text-pacific-blue"
@@ -178,7 +179,7 @@ export default function EditProductPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="details">
-            <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
+            <CardContent className="space-y-3 p-3 sm:space-y-6 sm:p-6">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-gray-300">
                   Product Name
@@ -203,7 +204,7 @@ export default function EditProductPage() {
                   }
                   defaultValue={formData.category}
                 >
-                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                  <SelectTrigger className={cn("bg-gray-700 border-gray-600 text-white", "max-w-[200px] sm:max-w-full")}>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700">
@@ -233,7 +234,7 @@ export default function EditProductPage() {
             </CardContent>
           </TabsContent>
           <TabsContent value="inventory">
-            <CardContent className="space-y-4 p-4 sm:space-y-6 sm:p-6">
+            <CardContent className="space-y-3 p-3 sm:space-y-6 sm:p-6">
               <div className="space-y-2">
                 <Label htmlFor="price" className="text-gray-300">
                   Price (R)
@@ -272,7 +273,7 @@ export default function EditProductPage() {
           </TabsContent>
         </Tabs>
 
-        <CardFooter className="flex flex-col sm:flex-row justify-between sm:space-x-4 space-y-4 sm:space-y-0">
+        <CardFooter className="flex flex-col sm:flex-row justify-between sm:space-x-4 space-y-2 sm:space-y-0 p-3 sm:p-6">
           <Button
             variant="destructive"
             onClick={handleDelete}
@@ -293,9 +294,9 @@ export default function EditProductPage() {
       </Card>
 
       {showSuccessAlert && (
-        <Alert className="max-w-md mx-auto mt-4 bg-green-600 text-white">
-          <AlertTitle className="text-sm sm:text-base">Success</AlertTitle>
-          <AlertDescription className="text-sm sm:text-base">
+        <Alert className="max-w-md mx-auto mt-2 sm:mt-4 bg-green-600 text-white text-sm sm:text-base">
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>
             {updateMutation.isSuccess
               ? "Product updated successfully!"
               : "Product deleted successfully!"}
@@ -304,9 +305,9 @@ export default function EditProductPage() {
       )}
 
       {showErrorAlert && (
-        <Alert variant="destructive" className="max-w-md mx-auto mt-4">
-          <AlertTitle className="text-sm sm:text-base">Error</AlertTitle>
-          <AlertDescription className="text-sm sm:text-base">
+        <Alert variant="destructive" className="max-w-md mx-auto mt-2 sm:mt-4 text-sm sm:text-base">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
             {updateMutation.isError
               ? "Failed to update product."
               : "Failed to delete product."}
@@ -316,3 +317,4 @@ export default function EditProductPage() {
     </motion.div>
   );
 }
+
