@@ -62,7 +62,7 @@ const SalesChart = () => {
     <Card className="w-full bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Sales Difference</h3>
+          <h3 className="text-lg font-semibold text-white">Sales</h3>
           <div className="flex items-center space-x-4">
             <Select
               defaultValue="7 days"
