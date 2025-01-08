@@ -1,67 +1,102 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import { Info } from 'lucide-react';
+"use client";
+
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { Info } from "lucide-react";
+import { Select, SelectItem, SelectTrigger, SelectContent } from "@/components/ui/select";
 
 const SalesChart = () => {
-  // Sample data structure
-  const dailyData = Array.from({ length: 31 }, (_, i) => ({
-    day: i + 1,
-    thisMonth: i < 8 ? 5750 : 0,  // Blue line data
-    lastMonth: i > 20 ? 6000 : 500,  // Orange line data
-  }));
+  const [filter, setFilter] = useState("7 days");
 
+  // Generate random sales data
+  interface SalesData {
+    day: string;
+    thisMonth: number;
+    lastMonth: number;
+  }
 
+  const generateData = (days: number): SalesData[] =>
+    Array.from({ length: days }, (_, i) => ({
+      day: `Oct ${20 + i}`,
+      thisMonth: Math.floor(Math.random() * 500) + 50,
+      lastMonth: Math.floor(Math.random() * 500) + 50,
+    }));
+
+  const getFilteredData = () => {
+    switch (filter) {
+      case "7 days":
+        return generateData(7);
+      case "14 days":
+        return generateData(14);
+      case "30 days":
+        return generateData(30);
+      default:
+        return generateData(7);
+    }
+  };
+
+  const formatYAxis = (value: number): string => `R ${value}`;
+  const data = getFilteredData();
 
   return (
-    <Card className="w-full p-6">
-      <div className="mt-4">
-        <div className="flex items-center gap-6 mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 "></div>
-            <span className="text-sm text-gray-600">This month</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-orange-500"></div>
-            <span className="text-sm text-gray-600">Last month</span>
+    <Card className="w-full p-4 sm:p-6">
+      <CardContent className="p-0">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Sales Difference</h3>
+          <div className="flex items-center space-x-4">
+            <Select
+              defaultValue="7 days"
+              onValueChange={(value) => setFilter(value)}
+            >
+              <SelectTrigger className="text-sm border rounded-md p-2">
+                {filter}
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7 days">Last 7 days</SelectItem>
+                <SelectItem value="14 days">Last 14 days</SelectItem>
+                <SelectItem value="30 days">Last 30 days</SelectItem>
+              </SelectContent>
+            </Select>
+            <Info className="text-gray-400" size={20} />
           </div>
         </div>
-
-        <div className="h-[300px]">
+        <div className="h-[300px] sm:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dailyData}>
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <XAxis
                 dataKey="day"
                 tickLine={false}
                 axisLine={false}
                 padding={{ left: 10, right: 10 }}
+                tick={{ fontSize: 14 }}
               />
               <YAxis
-                tickFormatter={(value) => `R ${value}`}
+                tickFormatter={formatYAxis}
                 axisLine={false}
                 tickLine={false}
                 padding={{ top: 10, bottom: 10 }}
+                tick={{ fontSize: 14 }}
               />
-              <Line
-                type="stepAfter"
-                dataKey="thisMonth"
-                stroke="#a45ee5"
-                strokeWidth={2}
-                dot={{ r: 1 }}
-                activeDot={{ r: 6 }}
+              <Tooltip
+                formatter={(value) => `R ${value}`}
+                labelFormatter={(label) => `${label}`}
               />
-              <Line
-                type="stepAfter"
-                dataKey="lastMonth"
-                stroke="#003DA5"
-                strokeWidth={2}
-                dot={{ r: 1 }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
+              <Legend />
+              <Bar dataKey="thisMonth" fill="#3AAFA9" name="This Month" />
+              <Bar dataKey="lastMonth" fill="#F08A5D" name="Last Month" />
+            </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };
