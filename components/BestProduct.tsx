@@ -38,7 +38,7 @@ const COLORS = [
 
 const chartConfig: ChartConfig = {
   visitors: {
-    label: "Metrics", // Placeholder for now
+    label: "Stock", // Updated label
   },
 };
 
@@ -57,11 +57,15 @@ export function BestProduct() {
   });
 
   const chartData = useMemo(() => {
-    // Transform product data into chart format and assign colors
-    return products.map((product: Product, index: number) => ({
-      browser: product.name, // Using product name for now
-      visitors: product.stock, // Placeholder, could be replaced with purchases later
-      fill: COLORS[index % COLORS.length], // Assigning colors cyclically
+    // Sort products by stock (or any other metric you want to use for "best performing")
+    const sortedProducts = [...products].sort((a, b) => b.stock - a.stock);
+    // Take top 5 products
+    const topProducts = sortedProducts.slice(0, 5);
+    
+    return topProducts.map((product: Product, index: number) => ({
+      name: product.name,
+      stock: product.stock,
+      fill: COLORS[index % COLORS.length],
     }));
   }, [products]);
 
@@ -87,7 +91,6 @@ export function BestProduct() {
 
   return (
     <Card className="flex flex-col bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white h-full">
-      {/* Header Section */}
       <CardHeader className="items-center pb-2 sm:pb-4 text-center sm:text-left">
         <CardTitle className="text-base sm:text-lg lg:text-xl font-bold">Best Performing Products</CardTitle>
         <CardDescription className="text-xs sm:text-sm text-[#05C3DE]">
@@ -95,7 +98,6 @@ export function BestProduct() {
         </CardDescription>
       </CardHeader>
 
-      {/* Chart Section */}
       <CardContent className="flex-1 pb-2 sm:pb-4">
         {chartData.length > 0 ? (
           <ChartContainer
@@ -112,16 +114,16 @@ export function BestProduct() {
               >
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent hideLabel nameKey="browser" />}
+                  content={<ChartTooltipContent hideLabel nameKey="name" />}
                 />
                 <RadialBar
-                  dataKey="visitors"
+                  dataKey="stock"
                   background={{ fill: "rgba(255, 255, 255, 0.1)" }}
                   fill="fill"
                 >
                   <LabelList
                     position="insideStart"
-                    dataKey="browser"
+                    dataKey="name"
                     className="fill-white capitalize"
                     fontSize={9}
                   />
@@ -134,13 +136,12 @@ export function BestProduct() {
         )}
       </CardContent>
 
-      {/* Footer Section */}
       <CardFooter className="flex flex-col gap-2 text-xs sm:text-sm pt-2 sm:pt-4">
         <div className="flex items-center gap-2 font-medium leading-none text-[#05C3DE]">
           <span className="whitespace-nowrap">Trending up by 5.2% this month</span> <TrendingUp className="h-4 w-4 flex-shrink-0" />
         </div>
         <div className="leading-tight text-[#00A3E0] text-center sm:text-left">
-          Showing best performing products for the last 6 months
+          Showing top 5 products by stock level
         </div>
       </CardFooter>
     </Card>
