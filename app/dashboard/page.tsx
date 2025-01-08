@@ -99,9 +99,9 @@ export default function DashboardPage() {
 
       {/* Product Pie Chart and Best Product */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* <div className="md:col-span-2">
+        <div className="md:col-span-2">
           <ProductPieChart />
-        </div> */}
+        </div>
         <div className="md:col-span-2 lg:col-span-1">
           <BestProduct />
         </div>
