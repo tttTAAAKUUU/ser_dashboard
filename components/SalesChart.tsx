@@ -15,34 +15,15 @@ const SalesChart = () => {
 
   return (
     <Card className="w-full p-6">
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        {metrics.map((metric, index) => (
-          <div key={index} className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">{metric.title}</span>
-              <Info className="w-4 h-4 text-gray-400" />
-            </div>
-            <div className="text-2xl font-semibold">{metric.value}</div>
-            <div className={`inline-flex px-2 py-1 rounded-md text-sm ${
-              metric.isNegative 
-                ? 'bg-red-100 text-red-700' 
-                : 'bg-green-100 text-green-700'
-            }`}>
-              {metric.change}
-            </div>
-          </div>
-        ))}
-      </div> */}
-
       <div className="mt-4">
         <div className="flex items-center gap-6 mb-4">
           <div className="flex items-center gap-2">
             <div className="w-3 h-0.5 "></div>
-            <span className="text-sm text-gray-600">Current month</span>
+            <span className="text-sm text-gray-600">This month</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-0.5 bg-orange-500"></div>
-            <span className="text-sm text-gray-600">Previous month</span>
+            <span className="text-sm text-gray-600">Last month</span>
           </div>
         </div>
 
