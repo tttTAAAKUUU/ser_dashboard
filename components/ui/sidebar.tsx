@@ -43,14 +43,14 @@ export function Sidebar({ className }: SidebarProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      const isSmallScreen = window.innerWidth < 768; // Mobile breakpoint
+      const isSmallScreen = window.innerWidth < 768;
       setIsMobile(isSmallScreen);
       if (isSmallScreen) {
         setIsCollapsed(true); // Always collapse on mobile
       }
     };
 
-    handleResize(); // Check on initial render
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -70,7 +70,7 @@ export function Sidebar({ className }: SidebarProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute -right-4 top-4 z-10 h-10 w-10 rounded-full bg-gray-800 text-gray-100 shadow-md transition-transform hover:scale-110"
+            className="absolute -right-4 top-4 z-10 h-10 w-50 rounded-full bg-gray-800 text-gray-100 shadow-md transition-transform hover:scale-110"
             aria-label="Toggle Sidebar"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
