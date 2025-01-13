@@ -11,11 +11,13 @@ import {
   Legend,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import { Select, SelectItem, SelectTrigger, SelectContent } from "@/components/ui/select";
 
 const SalesChart = () => {
   const [filter, setFilter] = useState("7 days");
+  const [showDummyDataInfo, setShowDummyDataInfo] = useState(true);
 
   // Generate random sales data
   const generateData = (days: number) =>
@@ -59,7 +61,7 @@ const SalesChart = () => {
   const formatYAxis = (value: number) => `R ${value}`;
 
   return (
-    <Card className="w-full bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white">
+    <Card className="w-full bg-gradient-to-br from-[#171F2E] to-[#071D49] text-white relative">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">Sales</h3>
@@ -80,6 +82,7 @@ const SalesChart = () => {
             <Info className="text-gray-400" size={20} />
           </div>
         </div>
+
         <div className="h-[300px] sm:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -139,6 +142,28 @@ const SalesChart = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
+
+        {showDummyDataInfo && (
+          <div className="absolute bottom-4 left-4 bg-gray-900 bg-opacity-40 text-white p-4 rounded-lg shadow-md z-10">
+            <p className="text-sm">
+            You are currently viewing a demo of the sales report. This chart allows you to explore its functionality. Once your sales data becomes available, it will be displayed here in a similar format.
+            </p>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="mt-2"
+              onClick={() => setShowDummyDataInfo(false)}
+            >
+              Close Demo
+            </Button>
+          </div>
+        )}
+
+        {!showDummyDataInfo && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <p className="text-white text-lg">No sales data available.</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
