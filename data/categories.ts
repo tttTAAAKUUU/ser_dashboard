@@ -2,7 +2,7 @@ export interface Category {
   name: string;
 }
 
-export const BACKEND_URL = "https://test-bos-omega.vercel.app";
+export const BACKEND_URL = "https://bos-backend-v2-2.vercel.app";
 
 /**
  * Fetch all categories
@@ -33,12 +33,12 @@ export const fetchCategories = async (token: string): Promise<Category[]> => {
  * @param token The authentication token
  * @param name The name of the new category
  */
-export const addCategory = async (token: string, name: string): Promise<void> => {
+export const addCategory = async (name: string, token: string): Promise<void> => {
   const response = await fetch(`${BACKEND_URL}/api/categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // Add the token here
     },
     body: JSON.stringify({ name }),
   });
@@ -47,6 +47,7 @@ export const addCategory = async (token: string, name: string): Promise<void> =>
     throw new Error(`Error adding category: ${response.statusText}`);
   }
 };
+
 
 /**
  * Update an existing category

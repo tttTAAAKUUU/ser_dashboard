@@ -11,7 +11,7 @@ export interface Transaction {
   userId: string;
 }
 
-export const BACKEND_URL = "https://test-bos-omega.vercel.app";
+export const BACKEND_URL = "https://bos-backend-v2-2.vercel.app";
 
 /**
  * Fetch transactions from the backend API.

@@ -50,6 +50,10 @@ export default function CategoryManagement() {
   }, [session]);
 
   // Add a new category
+
+  const testAddCat = async()=>{
+    await addCategory( newCategoryName);
+  }
   const handleAddCategory = async () => {
     try {
       if (!session) {
@@ -63,7 +67,7 @@ export default function CategoryManagement() {
         return;
       }
 
-      await addCategory(token, newCategoryName);
+      await addCategory( newCategoryName);
       console.log("Added Category:", newCategoryName); // Debug log
       setCategories((prev) => [...prev, { name: newCategoryName }]);
       setNewCategoryName("");
@@ -160,7 +164,7 @@ export default function CategoryManagement() {
           placeholder="New Category Name"
           className="flex-1"
         />
-        <Button onClick={handleAddCategory}>
+        <Button onClick={testAddCat}>
           <Plus className="mr-2 h-4 w-4" /> Add Category
         </Button>
       </div>
