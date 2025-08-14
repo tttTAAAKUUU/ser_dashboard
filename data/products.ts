@@ -1,21 +1,26 @@
-export interface Product {
+// types/requests.ts
+
+export interface Request {
   id: string;
+  title: string;
   name: string;
+  date: string;
+  time: string;
   description: string;
+  address: string;
+  area: string;
   price: number;
-  category: string;
-  stock: number;
-  image: string;
+  stars: number;
 }
 
 export const BACKEND_URL = "https://bos-backend-v2-2.vercel.app";
 
 /**
- * Fetch all products.
+ * Fetch all requests.
  * @param token Clerk's session token.
  */
-export const fetchProducts = async (token: string): Promise<Product[]> => {
-  const response = await fetch(`${BACKEND_URL}/api/products`, {
+export const fetchRequests = async (token: string): Promise<Request[]> => {
+  const response = await fetch(`${BACKEND_URL}/api/requests`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -24,19 +29,19 @@ export const fetchProducts = async (token: string): Promise<Product[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(`Error fetching products: ${response.statusText}`);
+    throw new Error(`Error fetching requests: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Fetch a single product by ID.
- * @param id Product ID.
+ * Fetch a single request by ID.
+ * @param id Request ID.
  * @param token Clerk's session token.
  */
-export const fetchProductById = async (id: string, token: string): Promise<Product> => {
-  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
+export const fetchRequestById = async (id: string, token: string): Promise<Request> => {
+  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -45,46 +50,46 @@ export const fetchProductById = async (id: string, token: string): Promise<Produ
   });
 
   if (!response.ok) {
-    throw new Error(`Error fetching product: ${response.statusText}`);
+    throw new Error(`Error fetching request: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Update a product by ID.
- * @param id Product ID.
- * @param updatedProduct Updated product data.
+ * Update a request by ID.
+ * @param id Request ID.
+ * @param updatedRequest Updated request data.
  * @param token Clerk's session token.
  */
-export const updateProductById = async (
+export const updateRequestById = async (
   id: string,
-  updatedProduct: Partial<Product>,
+  updatedRequest: Partial<Request>,
   token: string
-): Promise<Product> => {
-  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
+): Promise<Request> => {
+  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(updatedProduct),
+    body: JSON.stringify(updatedRequest),
   });
 
   if (!response.ok) {
-    throw new Error(`Error updating product: ${response.statusText}`);
+    throw new Error(`Error updating request: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Delete a product by ID.
- * @param id Product ID.
+ * Delete a request by ID.
+ * @param id Request ID.
  * @param token Clerk's session token.
  */
-export const deleteProductById = async (id: string, token: string): Promise<void> => {
-  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
+export const deleteRequestById = async (id: string, token: string): Promise<void> => {
+  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -93,6 +98,6 @@ export const deleteProductById = async (id: string, token: string): Promise<void
   });
 
   if (!response.ok) {
-    throw new Error(`Error deleting product: ${response.statusText}`);
+    throw new Error(`Error deleting request: ${response.statusText}`);
   }
 };

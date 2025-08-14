@@ -1,224 +1,179 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { fetchProducts, Product } from "@/data/products";
-import { useSession } from "@clerk/nextjs";
 import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import AddProducts from "@/components/AddProducts";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { LoadingSpinner } from "@/components/ui/loader";
 import { Input } from "@/components/ui/input";
 import {
   Select,
+  SelectTrigger,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { RequestCard } from "@/components/RequestCard";
 
 const ProductsPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [stockFilter, setStockFilter] = useState("All");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [priceSort, setPriceSort] = useState("lowToHigh");
+  const [distanceFilter, setDistanceFilter] = useState("all");
 
-  const { session } = useSession();
-
-  const { data: products = [], isLoading, error } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      if (!session) throw new Error("No session found");
-      const token = await session.getToken();
-      if (!token) throw new Error("Token is null");
-      return fetchProducts(token);
+  // Mocked request data
+  const requests = [
+    {
+      id: "1",
+      name: "Taku Tembedza",
+      title: "Box Braids",
+      date: "11 Nov 2025",
+      time: "12:00pm",
+      description: "Standard box braids with hairpiece",
+      price: 800,
+      rating: 5,
+      address: "1 Dove Street",
+      area: "Bryanston",
+      distance: 12,
     },
-    enabled: !!session,
-  });
+    {
+      id: "2",
+      name: "Ayesha Patel",
+      title: "Cornrows",
+      date: "15 Nov 2025",
+      time: "10:00am",
+      description: "Tight neat cornrows",
+      price: 400,
+      rating: 4,
+      address: "22 Maple Ave",
+      area: "Sandton",
+      distance: 8,
+    },
+    {
+      id: "3",
+      name: "Lebo Mokoena",
+      title: "Knotless Braids",
+      date: "18 Nov 2025",
+      time: "1:30pm",
+      description: "Mid-back length knotless braids",
+      price: 1000,
+      rating: 5,
+      address: "5 Zinnia Rd",
+      area: "Randburg",
+      distance: 18,
+    },
+    {
+      id: "4",
+      name: "Zinhle Dlamini",
+      title: "Dreadlocks Retwist",
+      date: "20 Nov 2025",
+      time: "9:00am",
+      description: "Palm roll & retwist full head",
+      price: 600,
+      rating: 4,
+      address: "99 Orange Grove",
+      area: "Rosebank",
+      distance: 25,
+    },
+    {
+      id: "5",
+      name: "Musa Khumalo",
+      title: "Fade & Beard Trim",
+      date: "21 Nov 2025",
+      time: "3:00pm",
+      description: "Clean fade and detailed beard line-up",
+      price: 350,
+      rating: 5,
+      address: "31 Hilltop Street",
+      area: "Fourways",
+      distance: 30,
+    },
+  ];
 
-  const categories = ["All", ...Array.from(new Set(products.map((product: Product) => product.category)))];
+  const filteredRequests = requests
+    .filter((request) => {
+      const matchesSearch =
+        searchTerm === "" ||
+        request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const filteredProducts = products.filter((product: Product) => {
-    const matchesCategory =
-      selectedCategory === "All" || product.category === selectedCategory;
-    const matchesSearch =
-      searchTerm === "" || product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStock =
-      stockFilter === "All" ||
-      (stockFilter === "In Stock" && product.stock > 0) ||
-      (stockFilter === "Low Stock" && product.stock > 0 && product.stock <= 10) ||
-      (stockFilter === "Out of Stock" && product.stock === 0);
+      const matchesDistance =
+        distanceFilter === "all" || request.distance <= parseInt(distanceFilter);
 
-    return matchesCategory && matchesSearch && matchesStock;
-  });
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner className="text-pacific-blue w-10 h-10" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div className="p-6 text-red-500">Error: {error.message}</div>;
-  }
+      return matchesSearch && matchesDistance;
+    })
+    .sort((a, b) => {
+      if (priceSort === "lowToHigh") return a.price - b.price;
+      if (priceSort === "highToLow") return b.price - a.price;
+      return 0;
+    });
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Header Section */}
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Product List</h1>
-        <Button
-          className="bg-pacific-blue text-white rounded-lg px-6 py-3 shadow-lg hover:bg-cobalt transition-all duration-300 transform hover:scale-105"
-          onClick={() => setIsModalOpen(true)}
-        >
-          + Add Product
-        </Button>
-      </div>
-
       {/* Filters */}
-      <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8">
+        {/* Search Input */}
         <div className="space-y-2">
           <label htmlFor="search" className="text-sm font-medium text-gray-300">
-            Search Products
+            Search Requests
           </label>
           <Input
             id="search"
             type="text"
-            placeholder="Search by product name..."
+            placeholder="Search by name or service..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
+            className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm"
           />
         </div>
+
+        {/* Price Sort */}
         <div className="space-y-2">
-          <label htmlFor="category" className="text-sm font-medium text-gray-300">
-            Category
+          <label htmlFor="priceSort" className="text-sm font-medium text-gray-300">
+            Sort by Price
           </label>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger id="category" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient">
-              <SelectValue placeholder="Select a category" />
+          <Select value={priceSort} onValueChange={setPriceSort}>
+            <SelectTrigger id="priceSort" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm">
+              <SelectValue placeholder="Select price order" />
             </SelectTrigger>
             <SelectContent>
-              {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
+              <SelectItem value="lowToHigh">Low to High</SelectItem>
+              <SelectItem value="highToLow">High to Low</SelectItem>
             </SelectContent>
           </Select>
         </div>
+
+        {/* Distance Filter */}
         <div className="space-y-2">
-          <label htmlFor="stock" className="text-sm font-medium text-gray-300">
-            Stock Status
+          <label htmlFor="distance" className="text-sm font-medium text-gray-300">
+            Distance (max 30 km)
           </label>
-          <Select value={stockFilter} onValueChange={setStockFilter}>
-            <SelectTrigger id="stock" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient">
-              <SelectValue placeholder="Select stock status" />
+          <Select value={distanceFilter} onValueChange={setDistanceFilter}>
+            <SelectTrigger id="distance" className="h-10 w-full rounded-lg border border-gray-600 text-gray-200 bg-gray-800 px-4 text-sm shadow-sm">
+              <SelectValue placeholder="Select distance" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="All">All Stock</SelectItem>
-              <SelectItem value="In Stock">In Stock</SelectItem>
-              <SelectItem value="Low Stock">Low Stock</SelectItem>
-              <SelectItem value="Out of Stock">Out of Stock</SelectItem>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="10">Within 10 km</SelectItem>
+              <SelectItem value="20">Within 20 km</SelectItem>
+              <SelectItem value="30">Within 30 km</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      {/* Product Grid */}
-      <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <motion.div
-              key={product.id}
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Card className="overflow-hidden bg-gray-800 border-gray-700">
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={product.image || "https://via.placeholder.com/150"}
-                    alt={product.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="transition-transform duration-300 hover:scale-110"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-white">{product.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-400 line-clamp-2">{product.description}</p>
-                  <div className="mt-4 flex justify-between items-center">
-                    <span className="text-pacific-blue font-bold text-lg">
-                      R{product.price.toFixed(2)}
-                    </span>
-                    <Badge
-                      variant={
-                        product.stock > 10
-                          ? "default"
-                          : product.stock > 0
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {product.stock > 10
-                        ? "In Stock"
-                        : product.stock > 0
-                        ? "Low Stock"
-                        : "Out of Stock"}
-                    </Badge>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link href={`/dashboard/products/${product.id}`}>
-                    <Button className="w-full bg-pacific-blue hover:bg-cobalt transition-colors">
-                      View Details
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))
-        ) : (
-          <div className="col-span-full text-center text-gray-400 text-lg py-12">
-            No products available.{" "}
-            <span
-              className="text-pacific-blue font-medium cursor-pointer hover:underline"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Add some products!
-            </span>
-          </div>
-        )}
-      </motion.div>
-
-      {/* Add Product Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg bg-gray-800 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Add New Product</DialogTitle>
-          </DialogHeader>
-          <AddProducts />
-        </DialogContent>
-      </Dialog>
+      {/* Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredRequests.map((request) => (
+          <RequestCard
+            key={request.id}
+            name={request.name}
+            title={request.title}
+            date={request.date}
+            time={request.time}
+            description={request.description}
+            price={request.price}
+            stars={request.rating}
+            address={request.address}
+            area={request.area}
+          />
+        ))}
+      </div>
     </div>
   );
 };

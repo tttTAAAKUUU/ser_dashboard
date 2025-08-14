@@ -1,16 +1,17 @@
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
+import LOGO from "@/public/LOGO.png";
 
 export default function Page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-1">
       {/* Header Section */}
-      <div className="mb-8">
+      <div className="mb-3">
         <Image
-          src="https://utfs.io/f/555e3ace-5e98-4068-883f-28033f9f5b7d-ilwz8r.png"
+          src={LOGO}
           alt="Logo"
-          width={150}
-          height={150}
+          width={300}
+          height={300}
           className="object-contain"
         />
       </div>

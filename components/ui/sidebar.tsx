@@ -21,6 +21,7 @@ import {
   Building,
 } from "lucide-react";
 import Image from "next/image";
+import LOGO1 from'@/public/LOGO1.png'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -34,10 +35,8 @@ export function Sidebar({ className }: SidebarProps) {
 
   const routes = [
     { label: "Home", icon: LayoutDashboard, href: "/dashboard" },
-    { label: "Products", icon: ShoppingCart, href: "/dashboard/products" },
+    { label: "Requests", icon: ShoppingCart, href: "/dashboard/products" },
     { label: "Transactions", icon: ArrowLeftRight, href: "/dashboard/transactions" },
-    { label: "Categories", icon: Boxes, href: "/dashboard/category" },
-    { label: "Manage Staff", icon: User, href: "/dashboard/staffmembers" },
     { label: "Settings", icon: Settings, href: "/dashboard/settings" },
   ];
 
@@ -83,8 +82,8 @@ export function Sidebar({ className }: SidebarProps) {
           {/* Logo and Dashboard Title */}
           <div className={cn("flex items-center", isCollapsed ? "justify-center" : "")}>
             <Image
-              src="https://utfs.io/f/vjV372zIanAGEJxDKXg2Y7FETPSGKLjvqoNtVp5efcmwya9H"
-              alt="BOSPay Logo"
+              src={LOGO1}
+              alt="SER Logo"
               width={48}
               height={48}
               className={cn("transition-all", isCollapsed ? "w-8 h-8" : "w-12 h-12 mr-3")}

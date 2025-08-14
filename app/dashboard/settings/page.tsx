@@ -1,6 +1,5 @@
 "use client";
 
-import { useOrganization } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -9,24 +8,20 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function SettingsPage() {
-  const { organization, membership } = useOrganization(); // Fetch organization details from Clerk
-  const [storeName, setStoreName] = useState(organization?.name || "");
-  const [storeSlug, setStoreSlug] = useState(organization?.slug || "");
+  const [storeName, setStoreName] = useState("");
+  const [storeSlug, setStoreSlug] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
-    if (!organization) return;
-
     try {
       setIsLoading(true);
 
-      // Update the organization details via Clerk API
-      await organization.update({ name: storeName, slug: storeSlug });
-
-      alert("Store details updated successfully.");
+      // Simulate saving settings — replace with real logic if needed
+      console.log("Saving store settings:", { storeName, storeSlug });
+      alert("Store details saved successfully.");
     } catch (error) {
-      console.error("Failed to update store details:", error);
-      alert("An error occurred while updating store details.");
+      console.error("Failed to save store details:", error);
+      alert("An error occurred while saving.");
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +40,6 @@ export default function SettingsPage() {
           <CardTitle>General Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Editable Store Name */}
           <div className="space-y-2">
             <Label htmlFor="store-name">Store Name</Label>
             <Input
@@ -53,11 +47,9 @@ export default function SettingsPage() {
               placeholder="Enter your store name"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
-              disabled={!membership?.role.includes("admin")} // Restrict editing to admins
             />
           </div>
 
-          {/* Editable Store Slug */}
           <div className="space-y-2">
             <Label htmlFor="store-slug">Store Slug</Label>
             <Input
@@ -65,15 +57,13 @@ export default function SettingsPage() {
               placeholder="Enter your store slug"
               value={storeSlug}
               onChange={(e) => setStoreSlug(e.target.value)}
-              disabled={!membership?.role.includes("admin")} // Restrict editing to admins
             />
           </div>
 
-          {/* Save Button */}
           <Button
             onClick={handleSave}
             variant="default"
-            disabled={!membership?.role.includes("admin") || isLoading} // Restrict saving to admins
+            disabled={isLoading}
             className="w-full"
           >
             {isLoading ? "Saving..." : "Save Changes"}
