@@ -1,12 +1,42 @@
-import { auth } from '@clerk/nextjs/server'
-import { redirect } from "next/navigation"
+import React from 'react';
+import Hero from '@/components/Hero';
+import { Separator } from '@/components/ui/separator';
+import Join from '@/components/Join';
+import FAQ from '@/components/FAQ';
+import About from '@/components/About';
+import Footer from '@/components/Footer';
+import Contact from '@/components/Contact';
+import Navbar from '@/components/Navbar';
 
-export default async function Home() {
-  const { userId }: { userId: string | null } = await auth()
+const Home = () => {
+  return (
+    <div className="scroll-smooth">
+      <Navbar />
+      
+      {/* Hero stays dark */}
+      <section id="hero">
+        <Hero />
+      </section>
 
-  if (!userId) {
-    redirect("/sign-in")
-  }
+      <section id="join" className="bg-white text-black">
+        <Join />
+      </section>
 
-  redirect("/dashboard")
-}
+      <section id="about" className="bg-white text-black">
+        <About />
+      </section>
+
+      <section id="faq" className="bg-white text-black">
+        <FAQ />
+      </section>
+
+      <section id="contact" className="bg-white text-black">
+        <Contact />
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default Home;

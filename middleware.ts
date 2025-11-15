@@ -1,19 +1,12 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+// middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/client"]);
-
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
-    const authObject = await auth(); // Await the auth call
-
-    
-    if (!authObject.userId) {
-      // Redirect to sign-in page or handle unauthenticated access
-      return authObject.redirectToSignIn(); // Use redirectToSignIn instead of protect()
-    }
-  }
-});
+export function middleware(req: NextRequest) {
+  // You can add custom auth checks here later
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/",],
+  matcher: ["/((?!.*\\..*|_next).*)", "/"],
 };

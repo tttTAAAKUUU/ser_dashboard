@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { useUser, OrganizationSwitcher, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -12,16 +11,16 @@ import {
   LayoutDashboard,
   ShoppingCart,
   ArrowLeftRight,
-  Boxes,
-  User,
   Settings,
   ChevronLeft,
   ChevronRight,
   LogOut,
   Building,
+  User,
+  Calendar, // ✅ added
 } from "lucide-react";
 import Image from "next/image";
-import LOGO1 from'@/public/LOGO1.png'
+import LOGO from "../../public/LOGO.png";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,28 +30,39 @@ export function Sidebar({ className }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const { user } = useUser();
+  // Simulated user (replace this with your actual auth data)
+  const user = {
+    fullName: "Takudzwa Tembedza",
+    email: "takudzwa@example.com",
+    orgs: ["Main Store", "Salon 21"],
+  };
 
+  // ✅ Added Appointments route
   const routes = [
     { label: "Home", icon: LayoutDashboard, href: "/dashboard" },
-    { label: "Requests", icon: ShoppingCart, href: "/dashboard/products" },
+    { label: "Requests", icon: ShoppingCart, href: "/dashboard/requests" },
     { label: "Transactions", icon: ArrowLeftRight, href: "/dashboard/transactions" },
+    { label: "Appointments", icon: Calendar, href: "/dashboard/appointments" }, // ✅ new
     { label: "Settings", icon: Settings, href: "/dashboard/settings" },
   ];
 
   useEffect(() => {
     const handleResize = () => {
-      const isSmallScreen = window.innerWidth < 768;
-      setIsMobile(isSmallScreen);
-      if (isSmallScreen) {
-        setIsCollapsed(true); // Always collapse on mobile
-      }
+      const small = window.innerWidth < 768;
+      setIsMobile(small);
+      if (small) setIsCollapsed(true);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleLogout = () => {
+    setShowLogoutModal(false);
+    // TODO: Add your logout logic here
+    console.log("User logged out");
+  };
 
   return (
     <>
@@ -69,7 +79,7 @@ export function Sidebar({ className }: SidebarProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute -right-4 top-4 z-10 h-10 w-50 rounded-full bg-gray-800 text-gray-100 shadow-md transition-transform hover:scale-110"
+            className="absolute -right-4 top-4 z-10 h-10 w-10 rounded-full bg-gray-800 text-gray-100 shadow-md transition-transform hover:scale-110"
             aria-label="Toggle Sidebar"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
@@ -79,10 +89,10 @@ export function Sidebar({ className }: SidebarProps) {
 
         {/* Header */}
         <div className={cn("p-4 flex flex-col gap-4", isCollapsed ? "items-center" : "")}>
-          {/* Logo and Dashboard Title */}
+          {/* Logo */}
           <div className={cn("flex items-center", isCollapsed ? "justify-center" : "")}>
             <Image
-              src={LOGO1}
+              src={LOGO}
               alt="SER Logo"
               width={48}
               height={48}
@@ -91,36 +101,29 @@ export function Sidebar({ className }: SidebarProps) {
             {!isCollapsed && <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>}
           </div>
 
-          {/* Organization Switcher with Heading */}
+          {/* Organization Switcher */}
           {!isCollapsed ? (
             <div className="w-full">
               <h3 className="text-xs font-semibold uppercase text-gray-400 mb-2">Change Store</h3>
-              <OrganizationSwitcher
-                appearance={{
-                  elements: {
-                    rootBox: "w-full",
-                    organizationSwitcherTrigger:
-                      "w-full bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-md flex items-center justify-between",
-                    organizationPreview: "flex items-center gap-2",
-                    organizationSwitcherPopover: "bg-gray-800 border border-gray-700",
-                    organizationSwitcherTriggerIcon: "text-gray-400",
-                  },
-                }}
-              />
+              <select
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-md"
+                defaultValue={user.orgs[0]}
+              >
+                {user.orgs.map((org) => (
+                  <option key={org} value={org}>
+                    {org}
+                  </option>
+                ))}
+              </select>
             </div>
           ) : (
-            // Icon for collapsed state
             <div className="w-full flex justify-center">
-              <Button
-                variant="ghost"
-                className="bg-gray-700 hover:bg-gray-600 p-3 rounded-md flex items-center"
-              >
+              <Button variant="ghost" className="bg-gray-700 hover:bg-gray-600 p-3 rounded-md">
                 <Building className="h-5 w-5 text-white" />
               </Button>
             </div>
           )}
 
-          {/* Divider */}
           <div className="w-full border-t border-gray-700 my-2" />
         </div>
 
@@ -145,9 +148,7 @@ export function Sidebar({ className }: SidebarProps) {
                     )}
                   />
                   {!isCollapsed && (
-                    <span className="ml-3 font-medium group-hover:text-gray-100">
-                      {route.label}
-                    </span>
+                    <span className="ml-3 font-medium group-hover:text-gray-100">{route.label}</span>
                   )}
                 </Link>
               </Button>
@@ -162,12 +163,8 @@ export function Sidebar({ className }: SidebarProps) {
               )}
               onClick={() => setShowLogoutModal(true)}
             >
-              <LogOut
-                className="h-5 w-5 text-gray-400 transition-colors group-hover:text-gray-100"
-              />
-              {!isCollapsed && (
-                <span className="ml-3 font-medium group-hover:text-gray-100">Logout</span>
-              )}
+              <LogOut className="h-5 w-5 text-gray-400" />
+              {!isCollapsed && <span className="ml-3 font-medium text-gray-100">Logout</span>}
             </Button>
           </div>
         </ScrollArea>
@@ -188,17 +185,17 @@ export function Sidebar({ className }: SidebarProps) {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-blue-300 shadow-md">
               <User className="h-5 w-5 text-white" />
             </div>
-            {!isCollapsed && user && (
+            {!isCollapsed && (
               <div>
-                <p className="text-sm font-medium leading-none">{user.fullName || user.firstName}</p>
-                <p className="text-xs text-gray-400">{user.emailAddresses[0]?.emailAddress}</p>
+                <p className="text-sm font-medium leading-none">{user.fullName}</p>
+                <p className="text-xs text-gray-400">{user.email}</p>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Logout Confirmation Modal */}
+      {/* Logout Modal */}
       {showLogoutModal &&
         ReactDOM.createPortal(
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
@@ -208,15 +205,12 @@ export function Sidebar({ className }: SidebarProps) {
                 You are about to log out. Make sure you’ve saved your work.
               </p>
               <div className="flex justify-center gap-4">
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowLogoutModal(false)}
-                >
+                <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
                   Cancel
                 </Button>
-                <SignOutButton>
-                  <Button variant="destructive">Logout</Button>
-                </SignOutButton>
+                <Button variant="destructive" onClick={handleLogout}>
+                  Logout
+                </Button>
               </div>
             </div>
           </div>,
