@@ -1,11 +1,51 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/service-providers/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          device_name: "ser-dashboard",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid credentials");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
       <div className="max-w-sm w-full space-y-8">
@@ -17,20 +57,43 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-zinc-900 p-8 border border-zinc-800 rounded-2xl shadow-2xl space-y-5">
-          <div className="space-y-1.5">
-            <Label className="text-zinc-400 text-[9px] font-black uppercase">Email Address</Label>
-            <Input className="bg-zinc-950 border-zinc-800 text-white h-11" />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-zinc-400 text-[9px] font-black uppercase">Password</Label>
-            <Input type="password" className="bg-zinc-950 border-zinc-800 text-white h-11" />
-          </div>
-          <Button className="w-full bg-[#1B91D7] text-white font-black h-12 rounded-xl uppercase italic tracking-widest">
-            Sign In
-          </Button>
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-500 text-xs p-3 rounded-lg">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-1.5">
+              <Label className="text-zinc-400 text-[9px] font-black uppercase">Email Address</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-zinc-950 border-zinc-800 text-white h-11"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-zinc-400 text-[9px] font-black uppercase">Password</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="bg-zinc-950 border-zinc-800 text-white h-11"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#1B91D7] text-white font-black h-12 rounded-xl uppercase italic tracking-widest hover:bg-[#1B91D7]/90 disabled:opacity-50"
+            >
+              {isLoading ? "Signing In..." : "Sign In"}
+            </Button>
+          </form>
 
           <div className="flex flex-col items-center gap-4 pt-4">
-            <Link href="/auth/forgot-password" 
+            <Link href="/auth/forgot-password"
                   className="text-zinc-500 hover:text-[#1B91D7] text-[9px] font-black uppercase transition-colors">
               Forgot Password or Username?
             </Link>
