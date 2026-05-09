@@ -112,10 +112,10 @@ export default function ProviderSignup() {
               </div>
             )}
 
-            {/* STEP 3: DOMAIN SELECTION */}
+            {/* STEP 3: SERVICE CATEGORY SELECTION */}
             {step === 3 && (
               <div className="space-y-6 animate-in slide-in-from-right-4">
-                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#1B91D7]">Select Domain</h3>
+                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#1B91D7]">Select Service Category</h3>
                 <div className="grid grid-cols-1 gap-3">
                   {["Personal Care & Wellness", "Domestic & Laundry", "Mobile Car Wash", "Fitness & Training"].map((type) => (
                     <button 
