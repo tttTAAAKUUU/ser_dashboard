@@ -20,7 +20,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/service-providers/login", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service-providers/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -31,12 +31,13 @@ export default function LoginPage() {
       });
 
       const data = await response.json();
+      console.log("Login API response:", JSON.stringify(data, null, 2));
 
       if (!response.ok) {
         throw new Error(data.message || "Invalid credentials");
       }
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
       router.push("/dashboard");
     } catch (err) {

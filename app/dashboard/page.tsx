@@ -1,18 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, CheckCircle, CalendarClock, Star } from "lucide-react";
 import SalesChart from "@/components/SalesChart";
 import NoticeBoard from "@/components/NoticeBoard";
 
+interface ProfileData {
+  id: number;
+  name: string;
+  email: string;
+  profile: {
+    first_name: string;
+    last_name: string;
+    phone?: string;
+    dob?: string;
+    bio?: string | null;
+    gender?: string;
+  };
+}
+
+interface ProfileResponse {
+  data: ProfileData;
+}
+
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profile, setProfile] = useState<ProfileResponse | null>(null);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const userName = "Takudzwa"; // You can replace this with a real user name from your DB later
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token from localStorage:", token);
+
+      if (!token || undefined === token) {
+        console.log("No token found - user may not be logged in");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service-providers/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Response status:", response.status);
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 font-poppins px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6 lg:pb-8">
@@ -20,7 +66,7 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-            Hi, {userName || "there"}
+            Hi, { profile?.data.profile.first_name || "there"}
           </h2>
           <p className="text-sm sm:text-base text-white">
             Welcome back!
@@ -46,9 +92,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              R4,500
+              N/A
             </div>
-            <p className="text-xs text-dark-turquoise">+12% from last month</p>
+            <p className="text-xs text-dark-turquoise">Total earnings</p>
           </CardContent>
         </Card>
 
@@ -61,9 +107,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              28
+              N/A
             </div>
-            <p className="text-xs text-dark-turquoise">+3 this week</p>
+            <p className="text-xs text-dark-turquoise">Completed requests</p>
           </CardContent>
         </Card>
 
@@ -76,9 +122,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              5
+              N/A
             </div>
-            <p className="text-xs text-dark-turquoise">Next: 21 Jun</p>
+            <p className="text-xs text-dark-turquoise">Upcoming requests</p>
           </CardContent>
         </Card>
 
@@ -91,10 +137,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              4.8 ★
+              N/A
             </div>
             <p className="text-xs text-dark-turquoise">
-              Based on 23 reviews
+              Rating
             </p>
           </CardContent>
         </Card>
