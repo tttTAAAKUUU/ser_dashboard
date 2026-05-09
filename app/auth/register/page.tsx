@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { 
-  CheckCircle2, ChevronRight, ChevronLeft, ShieldCheck, Camera, Lock, Mail, MapPin
+  CheckCircle2, ChevronRight, ChevronLeft, ShieldCheck, Camera, Lock, Mail, MapPin, User, Info
 } from "lucide-react";
 
 export default function ProviderSignup() {
@@ -16,6 +17,7 @@ export default function ProviderSignup() {
     firstName: "", lastName: "", email: "", phone: "",
     password: "", confirmPassword: "", otp: "",
     serviceArea: "", serviceType: "",
+    bio: "",
   });
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -25,16 +27,16 @@ export default function ProviderSignup() {
     <div className="min-h-screen bg-zinc-950 text-white py-12 px-4">
       <div className="max-w-xl mx-auto space-y-8">
         
-        {/* Progress Bar */}
+        {/* Progress Bar - Updated to 6 steps */}
         <div className="flex items-center justify-center gap-2">
-          {[1, 2, 3, 4, 5].map((s) => (
+          {[1, 2, 3, 4, 5, 6].map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center border-2 font-black text-xs transition-all
                 ${step === s ? `border-[#1B91D7] bg-[#1B91D7] shadow-[0_0_15px_rgba(27,145,215,0.4)]` : 
                   step > s ? "border-green-500 bg-green-500" : "border-zinc-800 text-zinc-600"}`}>
                 {step > s ? "✓" : s}
               </div>
-              {s !== 5 && <div className={`h-[1px] w-4 ${step > s ? 'bg-green-500' : 'bg-zinc-800'}`} />}
+              {s !== 6 && <div className={`h-[1px] w-4 ${step > s ? 'bg-green-500' : 'bg-zinc-800'}`} />}
             </div>
           ))}
         </div>
@@ -112,10 +114,10 @@ export default function ProviderSignup() {
               </div>
             )}
 
-            {/* STEP 3: SERVICE CATEGORY SELECTION */}
+            {/* STEP 3: DOMAIN SELECTION */}
             {step === 3 && (
               <div className="space-y-6 animate-in slide-in-from-right-4">
-                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#1B91D7]">Select Service Category</h3>
+                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#1B91D7]">Select Domain</h3>
                 <div className="grid grid-cols-1 gap-3">
                   {["Personal Care & Wellness", "Domestic & Laundry", "Mobile Car Wash", "Fitness & Training"].map((type) => (
                     <button 
@@ -132,8 +134,47 @@ export default function ProviderSignup() {
               </div>
             )}
 
-            {/* STEP 4: STRIPE KYC */}
+            {/* STEP 4: PROFILE START (PHOTO & BIO) */}
             {step === 4 && (
+              <div className="space-y-6 animate-in slide-in-from-right-4">
+                <div className="space-y-1">
+                  <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#1B91D7]">Profile Identity</h3>
+                  <p className="text-zinc-500 text-[9px] font-black uppercase">How customers will see you</p>
+                </div>
+
+                <div className="flex flex-col items-center gap-4 py-4">
+                   <div className="relative group">
+                     <div className="w-24 h-24 rounded-full bg-zinc-950 border-2 border-dashed border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-[#1B91D7] transition-all">
+                        <Camera className="text-zinc-700 group-hover:text-[#1B91D7]" size={24} />
+                     </div>
+                     <button className="absolute bottom-0 right-0 p-2 bg-[#1B91D7] rounded-full border-2 border-zinc-900">
+                        <Camera size={12} className="text-white" />
+                     </button>
+                   </div>
+                   <p className="text-zinc-400 text-[8px] font-black uppercase">Upload Profile Photo</p>
+                </div>
+
+                <div className="space-y-1.5">
+                   <Label className="text-zinc-400 text-[9px] uppercase font-black">Professional Bio</Label>
+                   <Textarea 
+                    className="bg-zinc-950 border-zinc-800 min-h-[100px] focus:border-[#1B91D7] text-xs font-bold" 
+                    placeholder="Tell clients about your experience and specialty..."
+                    value={formData.bio}
+                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                   />
+                </div>
+
+                <div className="bg-[#1B91D7]/5 border border-[#1B91D7]/20 p-4 rounded-xl flex gap-3 items-start">
+                   <Info className="text-[#1B91D7] shrink-0" size={16} />
+                   <p className="text-[9px] font-black uppercase text-zinc-400 leading-relaxed">
+                     <span className="text-[#1B91D7]">Note:</span> You will be able to add a full portfolio (pictures of your work) to the Profile Tab of your dashboard after sign up is complete.
+                   </p>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 5: STRIPE KYC */}
+            {step === 5 && (
               <div className="space-y-6 animate-in slide-in-from-right-4">
                 <div className="text-center space-y-3">
                   <ShieldCheck className="text-[#635BFF] mx-auto" size={40} />
@@ -159,8 +200,8 @@ export default function ProviderSignup() {
               </div>
             )}
 
-            {/* STEP 5: SUCCESS */}
-            {step === 5 && (
+            {/* STEP 6: SUCCESS */}
+            {step === 6 && (
               <div className="text-center space-y-6 animate-in zoom-in">
                 <div className="w-20 h-20 bg-[#1B91D7]/20 rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(27,145,215,0.2)]">
                   <CheckCircle2 className="text-[#1B91D7]" size={40} />
@@ -175,7 +216,7 @@ export default function ProviderSignup() {
               </div>
             )}
 
-            {step < 5 && (
+            {step < 6 && (
               <div className="flex gap-4 mt-10 pt-6 border-t border-zinc-800/50">
                 {step > 1 && (
                   <Button variant="ghost" onClick={prevStep} className="flex-1 text-zinc-500 hover:text-white font-black uppercase text-[10px] h-12">
@@ -187,7 +228,7 @@ export default function ProviderSignup() {
                   disabled={step === 3 && !formData.serviceType}
                   className="flex-1 bg-[#1B91D7] hover:bg-[#1B91D7]/90 text-white font-black h-12 rounded-xl uppercase italic tracking-widest shadow-[0_4px_15px_rgba(27,145,215,0.3)]"
                 >
-                  {step === 4 ? "Complete Profile" : "Continue"}
+                  {step === 5 ? "Complete Profile" : "Continue"}
                 </Button>
               </div>
             )}
