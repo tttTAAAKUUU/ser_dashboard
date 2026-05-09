@@ -58,10 +58,24 @@ export function Sidebar({ className }: SidebarProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setShowLogoutModal(false);
-    // TODO: Add your logout logic here
-    console.log("User logged out");
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service-providers/logout`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
   };
 
   return (

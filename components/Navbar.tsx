@@ -55,7 +55,20 @@ const Navbar = () => {
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service-providers/logout`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/";
