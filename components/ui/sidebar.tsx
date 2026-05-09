@@ -24,18 +24,50 @@ import LOGO from "../../public/LOGO.png";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+interface ProfileData {
+  id: number;
+  name: string;
+  email: string;
+  profile: {
+    first_name: string;
+    last_name: string;
+    phone?: string;
+    dob?: string;
+    bio?: string | null;
+    gender?: string;
+  };
+  organizations?: Array<{ id: number; name: string }>;
+}
+
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
 
-  // Simulated user (replace this with your actual auth data)
-  const user = {
-    fullName: "Takudzwa Tembedza",
-    email: "takudzwa@example.com",
-    orgs: ["Main Store", "Salon 21"],
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service-providers/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   // ✅ Added Appointments route
   const routes = [
@@ -116,16 +148,16 @@ export function Sidebar({ className }: SidebarProps) {
           </div>
 
           {/* Organization Switcher */}
-          {!isCollapsed ? (
+          {!isCollapsed && profile?.organizations && profile.organizations.length > 0 ? (
             <div className="w-full">
               <h3 className="text-xs font-semibold uppercase text-gray-400 mb-2">Change Store</h3>
               <select
                 className="w-full bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-md"
-                defaultValue={user.orgs[0]}
+                defaultValue={profile.organizations[0]?.name}
               >
-                {user.orgs.map((org) => (
-                  <option key={org} value={org}>
-                    {org}
+                {profile.organizations.map((org) => (
+                  <option key={org.id} value={org.name}>
+                    {org.name}
                   </option>
                 ))}
               </select>
@@ -199,10 +231,12 @@ export function Sidebar({ className }: SidebarProps) {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-blue-300 shadow-md">
               <User className="h-5 w-5 text-white" />
             </div>
-            {!isCollapsed && (
+            {!isCollapsed && profile && (
               <div>
-                <p className="text-sm font-medium leading-none">{user.fullName}</p>
-                <p className="text-xs text-gray-400">{user.email}</p>
+                <p className="text-sm font-medium leading-none">
+                  {profile.profile?.first_name} {profile.profile?.last_name}
+                </p>
+                <p className="text-xs text-gray-400">{profile.email}</p>
               </div>
             )}
           </div>
