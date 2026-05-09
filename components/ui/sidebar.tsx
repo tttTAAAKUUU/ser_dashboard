@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -10,18 +9,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   LayoutDashboard,
   ShoppingCart,
-  ArrowLeftRight,
+  History as HistoryIcon,
   Settings,
-  ChevronLeft,
+  ChevronLeft,Wallet,
   ChevronRight,
   LogOut,
-  Building,
   User,
-  Calendar, // ✅ added
+  Calendar,
 } from "lucide-react";
 import Image from "next/image";
 import LOGO from "../../public/LOGO.png";
 
+<<<<<<< HEAD
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface ProfileData {
@@ -68,13 +67,25 @@ export function Sidebar({ className }: SidebarProps) {
 
     fetchProfile();
   }, []);
+=======
+export function Sidebar({ className }: { className?: string }) {
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // ✅ Added Appointments route
+  const user = {
+    fullName: "Takudzwa Tembedza",
+    email: "takudzwa@example.com",
+  };
+>>>>>>> 6c9b3ec (feat: the rest)
+
   const routes = [
     { label: "Home", icon: LayoutDashboard, href: "/dashboard" },
     { label: "Requests", icon: ShoppingCart, href: "/dashboard/requests" },
-    { label: "Transactions", icon: ArrowLeftRight, href: "/dashboard/transactions" },
-    { label: "Appointments", icon: Calendar, href: "/dashboard/appointments" }, // ✅ new
+    { name: 'Earnings', icon: Wallet, href: '/dashboard/earnings' },
+    { label: "History", icon: HistoryIcon, href: "/dashboard/history" },
+    { label: "Appointments", icon: Calendar, href: "/dashboard/appointments" },
+    { label: "Profile", icon: User, href: "/dashboard/profile" },
     { label: "Settings", icon: Settings, href: "/dashboard/settings" },
   ];
 
@@ -84,12 +95,12 @@ export function Sidebar({ className }: SidebarProps) {
       setIsMobile(small);
       if (small) setIsCollapsed(true);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+<<<<<<< HEAD
   const handleLogout = async () => {
     setShowLogoutModal(false);
     const token = localStorage.getItem("token");
@@ -241,29 +252,62 @@ export function Sidebar({ className }: SidebarProps) {
             )}
           </div>
         </div>
+=======
+  return (
+    <div
+      className={cn(
+        "relative flex flex-col bg-gradient-to-b from-gray-900 to-black text-gray-100 border-r border-zinc-800 shadow-lg transition-all duration-300",
+        isCollapsed ? "w-[80px]" : "w-[280px]",
+        className
+      )}
+      style={{ height: "100vh", position: "sticky", top: 0 }}
+    >
+      {!isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute -right-4 top-10 z-50 h-8 w-8 rounded-full bg-[#1B91D7] text-white shadow-md hover:scale-110"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        </Button>
+      )}
+
+      <div className={cn("p-6 flex items-center gap-3", isCollapsed && "justify-center")}>
+        <Image src={LOGO} alt="Logo" width={40} height={40} />
+        {!isCollapsed && <h2 className="text-xl font-black italic uppercase tracking-tighter">SER</h2>}
+>>>>>>> 6c9b3ec (feat: the rest)
       </div>
 
-      {/* Logout Modal */}
-      {showLogoutModal &&
-        ReactDOM.createPortal(
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
-            <div className="bg-gray-800 rounded-lg p-6 shadow-lg w-96 text-center z-[10000]">
-              <h2 className="text-lg font-medium text-gray-200 mb-4">Are you sure?</h2>
-              <p className="text-sm text-gray-200 mb-6">
-                You are about to log out. Make sure you’ve saved your work.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
-                  Cancel
-                </Button>
-                <Button variant="destructive" onClick={handleLogout}>
-                  Logout
-                </Button>
+      <ScrollArea className="flex-1 px-3">
+        <div className="space-y-2">
+          {routes.map((route) => (
+            <Link key={route.href} href={route.href}>
+              <div className={cn(
+                "flex items-center gap-3 px-3 py-3 rounded-xl transition-all group",
+                pathname === route.href ? "bg-[#1B91D7] text-white" : "hover:bg-zinc-800 text-zinc-400"
+              )}>
+                <route.icon size={20} className={cn(pathname === route.href ? "text-white" : "group-hover:text-[#1B91D7]")} />
+                {!isCollapsed && <span className="text-[11px] font-black uppercase tracking-widest">{route.label}</span>}
               </div>
+            </Link>
+          ))}
+        </div>
+      </ScrollArea>
+
+      <div className={cn("p-4 mt-auto border-t border-zinc-800", isCollapsed && "flex justify-center")}>
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
+            <User size={18} />
+          </div>
+          {!isCollapsed && (
+            <div className="overflow-hidden">
+              <p className="text-[10px] font-black uppercase truncate">{user.fullName}</p>
+              <p className="text-[9px] text-zinc-500 truncate">{user.email}</p>
             </div>
-          </div>,
-          document.body
-        )}
-    </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

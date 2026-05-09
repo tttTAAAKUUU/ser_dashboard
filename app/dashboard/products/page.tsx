@@ -9,7 +9,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { RequestCard } from "@/components/RequestCard";
+import { RequestCard } from "@/components/AppointmentCard2";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");

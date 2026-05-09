@@ -1,165 +1,149 @@
 "use client";
-
-import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Info, Image as ImageIcon, MapPin, Calendar, Star, CheckCircle2, User } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { MapPin, Star, Scissors, Car, Dumbbell, Home, ImageIcon, Info, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Defined the type locally or import it if shared
-type RequestProps = {
-  title: string;
-  name: string;
-  date: string;
-  time: string;
-  description: string;
-  address: string;
-  area: string;
-  price: number;
-  stars: number;
-  showAcceptButton?: boolean;
-  serviceDetails?: {
-    shortDescription: string;
-    requirements: string[];
-    imageUrl?: string;
-  };
+const categoryConfig: any = {
+  grooming: { icon: Scissors, color: "text-blue-500", bg: "bg-blue-500/10", label: "Grooming", mode: "bid" },
+  carwash: { icon: Car, color: "text-emerald-500", bg: "bg-emerald-500/10", label: "Carwash", mode: "fixed" },
+  fitness: { icon: Dumbbell, color: "text-orange-500", bg: "bg-orange-500/10", label: "Fitness", mode: "bid" },
+  domestic: { icon: Home, color: "text-purple-500", bg: "bg-purple-500/10", label: "Domestic", mode: "fixed" },
 };
 
-export function RequestCard({
-  title,
-  name,
-  date,
-  time,
-  description,
-  address,
-  area,
-  price,
-  stars,
-  showAcceptButton = true,
-  serviceDetails = {
-    shortDescription: "Professional hair service at client’s location.",
-    requirements: ["2x Hairpiece packs", "Shampoo", "Conditioner", "Blow dryer", "Clippers"],
-    imageUrl: "/placeholder-service.jpg",
-  },
-}: RequestProps) {
-  const [modal, setModal] = useState<"info" | "image" | "confirm" | null>(null);
-
-  // Memoize date to avoid re-calculating on every render
-  const formattedDate = useMemo(() => {
-    const d = new Date(date);
-    return isNaN(d.getTime()) ? date : d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
-  }, [date]);
-
-  const closeModal = () => setModal(null);
+export function RequestCard({ req }: { req: any }) {
+  const [isBidOpen, setIsBidOpen] = useState(false);
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  
+  const config = categoryConfig[req.category] || categoryConfig.grooming;
+  const Icon = config.icon;
 
   return (
     <>
-      <Card className="bg-[#171F2E] border-slate-800 text-white shadow-xl hover:border-blue-500/40 transition-all duration-300 overflow-hidden">
-        <CardHeader className="pb-3 border-b border-white/5 bg-white/5">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-lg font-bold tracking-tight">{title}</CardTitle>
-                <div className="flex gap-1">
-                  <button onClick={() => setModal("info")} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-full text-blue-400 transition-colors">
-                    <Info size={14} />
-                  </button>
-                  <button onClick={() => setModal("image")} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-full text-blue-400 transition-colors">
-                    <ImageIcon size={14} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
-                <span className="flex items-center gap-1"><Calendar size={12} className="text-blue-500" /> {formattedDate} @ {time}</span>
-                <span className="flex items-center gap-1"><MapPin size={12} className="text-blue-500" /> {area}</span>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-xl font-black text-blue-400">R{price}</div>
-              <div className="flex items-center justify-end gap-1 text-[10px] text-yellow-500 font-bold uppercase">
-                <Star size={10} className="fill-current" /> {stars}
-              </div>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="pt-4 space-y-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-blue-500 uppercase tracking-widest">
-              <User size={10} /> Client: {name}
-            </div>
-            <p className="text-sm text-slate-300 line-clamp-2 bg-slate-900/40 p-2.5 rounded-md border border-white/5 italic">
-              "{description}"
-            </p>
-          </div>
-
-          {showAcceptButton && (
-            <Button 
-              onClick={() => setModal("confirm")}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold h-10 shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98]"
+      <Card className="bg-[#0B101A] border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all border-l-4" 
+            style={{ borderLeftColor: `var(--${config.color.split('-')[1]}-500)` }}>
+        <div className="p-5 flex flex-col md:flex-row gap-6">
+          
+          {/* Reference Image with Click-to-Enlarge */}
+          {req.category === "grooming" && req.refImage && (
+            <div 
+              className="relative w-full md:w-32 h-32 rounded-lg overflow-hidden border border-zinc-800 shrink-0 cursor-zoom-in group"
+              onClick={() => setIsImageOpen(true)}
             >
-              Accept Job Request
-            </Button>
+              <img src={req.refImage} alt="Reference" className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <ImageIcon size={20} className="text-white" />
+              </div>
+            </div>
           )}
-        </CardContent>
+
+          <div className="flex-1 space-y-4">
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className={cn("text-[10px] font-black uppercase tracking-tighter px-2 py-0.5 rounded", config.bg, config.color)}>
+                    {config.label}
+                  </span>
+                  <h3 className="font-bold text-lg text-white">{req.title}</h3>
+                </div>
+                <p className="text-[10px] text-zinc-500 uppercase font-black flex items-center gap-2">
+                  <MapPin size={12} className="text-blue-400" /> {req.area} • {req.distance}km away
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-2xl font-black text-white">R{req.price}</p>
+                <p className="text-[9px] text-zinc-500 uppercase font-bold">
+                  {config.mode === "fixed" ? "Fixed Price" : "Est. Budget"}
+                </p>
+              </div>
+            </div>
+
+            {req.category === "domestic" && req.houseSize && (
+              <div className="bg-zinc-900 border border-zinc-800 w-fit px-3 py-1.5 rounded-md flex items-center gap-2">
+                <Home size={14} className="text-purple-400" />
+                <span className="text-[10px] font-bold text-zinc-300 uppercase">Size: {req.houseSize}</span>
+              </div>
+            )}
+
+            <div className="bg-zinc-950/50 p-3 rounded-lg border border-zinc-800/50">
+              <p className="text-[10px] text-zinc-500 font-black uppercase mb-1 tracking-widest">Client Instructions</p>
+              <p className="text-xs text-zinc-300 italic leading-relaxed">"{req.description}"</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-end items-end min-w-[140px] border-l border-zinc-800 pl-4">
+            <div className="flex items-center gap-1 text-yellow-500 mb-4">
+              <Star size={14} fill="currentColor" />
+              <span className="text-xs font-black">{req.stars}</span>
+            </div>
+            
+            <Button 
+              onClick={() => setIsBidOpen(true)}
+              className={cn(
+                "w-full font-black uppercase text-[11px] tracking-widest h-12",
+                config.mode === "bid" ? "bg-white text-black hover:bg-zinc-200" : "bg-blue-600 hover:bg-blue-500 text-white"
+              )}
+            >
+              {config.mode === "bid" ? "Submit Bid" : "Accept Job"}
+            </Button>
+          </div>
+        </div>
       </Card>
 
-      {/* --- Modals --- */}
-      
-      {/* Info Modal */}
-      <Dialog open={modal === "info"} onOpenChange={closeModal}>
-        <DialogContent className="bg-[#0F172A] text-white border-slate-800">
+      {/* 1. Image Enlargement Modal */}
+      <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
+        <DialogContent className="bg-transparent border-none p-0 max-w-3xl shadow-none flex items-center justify-center">
+          <div className="relative group">
+            <img src={req.refImage} alt="Large Reference" className="rounded-xl border border-zinc-800 max-h-[80vh] w-auto" />
+            <button 
+              onClick={() => setIsImageOpen(false)}
+              className="absolute -top-4 -right-4 bg-white text-black rounded-full p-1 hover:bg-zinc-200 transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* 2. Bid Submission Modal */}
+      <Dialog open={isBidOpen} onOpenChange={setIsBidOpen}>
+        <DialogContent className="bg-zinc-950 border-zinc-800 text-white p-6">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 border-b border-white/10 pb-2 text-blue-400">
-              <Info size={18} /> Service Requirements
+            <DialogTitle className="text-xl font-black uppercase italic tracking-tighter">
+              {config.mode === "bid" ? "Place Your Bid" : "Confirm Acceptance"}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <p className="text-sm text-slate-400 leading-relaxed">{serviceDetails.shortDescription}</p>
-            <div className="grid grid-cols-2 gap-2">
-              {serviceDetails.requirements.map((req, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs bg-slate-800/50 p-2 rounded-lg border border-white/5 text-slate-200">
-                  <CheckCircle2 size={12} className="text-green-500" /> {req}
-                </div>
-              ))}
+          
+          <div className="space-y-6 pt-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Proposed Price (ZAR)</label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">R</span>
+                <Input 
+                  type="number" 
+                  defaultValue={req.price}
+                  className="bg-zinc-900 border-zinc-800 pl-8 focus:border-blue-500 text-lg font-bold" 
+                />
+              </div>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
 
-      {/* Image Modal */}
-      <Dialog open={modal === "image"} onOpenChange={closeModal}>
-        <DialogContent className="bg-[#0F172A] text-white border-slate-800 p-2 max-w-sm">
-          <img 
-            src={serviceDetails.imageUrl} 
-            alt="Reference" 
-            className="w-full aspect-square object-cover rounded-md" 
-          />
-          <p className="p-3 text-center text-xs font-bold uppercase tracking-widest text-slate-500">Style Reference</p>
-        </DialogContent>
-      </Dialog>
-
-      {/* Acceptance Modal */}
-      <Dialog open={modal === "confirm"} onOpenChange={closeModal}>
-        <DialogContent className="bg-[#0F172A] text-white border-slate-800">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl">Confirm Acceptance</DialogTitle>
-          </DialogHeader>
-          <div className="py-6 text-center space-y-4">
-            <div className="inline-flex p-3 bg-blue-500/10 rounded-full text-blue-500 mb-2">
-               <Calendar size={32} />
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Message to Client</label>
+              <Textarea 
+                placeholder="Briefly explain your experience or why you're a fit..." 
+                className="bg-zinc-900 border-zinc-800 min-h-[100px] focus:border-blue-500"
+              />
             </div>
-            <p className="text-sm text-slate-400 px-4">
-              You are committing to arrive at <span className="text-white font-bold">{address}</span> on <span className="text-white font-bold">{formattedDate}</span> at <span className="text-white font-bold">{time}</span>.
-            </p>
-            <p className="text-[10px] text-red-400 font-bold uppercase tracking-tighter bg-red-500/10 py-1 rounded">
-              Warning: Cancellations after acceptance affect your rating.
-            </p>
+
+            <Button className="w-full bg-blue-600 hover:bg-blue-500 font-black uppercase tracking-widest py-6">
+              Confirm & Send
+            </Button>
           </div>
-          <DialogFooter className="flex-row gap-2 sm:justify-center">
-            <Button variant="ghost" onClick={closeModal} className="flex-1 text-slate-500">Back</Button>
-            <Button className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold">Confirm Job</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
