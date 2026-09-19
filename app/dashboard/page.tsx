@@ -1,11 +1,8 @@
 "use client";
 
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
-=======
-import React from "react";
 import Link from "next/link";
->>>>>>> 6c9b3ec (feat: the rest)
+import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, CheckCircle, CalendarClock, Star } from "lucide-react";
 import ScheduleTimeline from "@/components/ScheduleTimeline";
@@ -30,12 +27,7 @@ interface ProfileResponse {
 }
 
 export default function DashboardPage() {
-<<<<<<< HEAD
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [profile, setProfile] = useState<ProfileResponse | null>(null);
-
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -66,27 +58,7 @@ export default function DashboardPage() {
     fetchProfile();
   }, []);
 
-  return (
-    <div className="space-y-4 sm:space-y-6 lg:space-y-8 font-poppins px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6 lg:pb-8">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-            Hi, { profile?.data.profile.first_name || "there"}
-          </h2>
-          <p className="text-sm sm:text-base text-white">
-            Welcome back!
-          </p>
-        </div>
-        <div className="w-full sm:w-auto">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="h-10 w-full sm:w-64 lg:w-72 rounded-lg border border-gray-300 px-4 text-sm shadow-sm focus:border-pacific-blue focus:ring focus:ring-light-blue-gradient"
-          />
-        </div>
-=======
-  const userName = "Takudzwa";
+  const userName = profile?.data.profile.first_name || "Takudzwa";
 
   const stats = [
     { label: "Total Earnings", value: "R4,500", sub: "+12% from last month", icon: DollarSign, color: "from-cobalt to-pacific-blue", href: "/dashboard/earnings" },
@@ -102,73 +74,9 @@ export default function DashboardPage() {
           Hi, {userName}
         </h2>
         <p className="text-xs font-black uppercase text-zinc-500">Welcome back to your workspace</p>
->>>>>>> 6c9b3ec (feat: the rest)
       </div>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-<<<<<<< HEAD
-        <Card className="bg-gradient-to-tr from-cobalt to-pacific-blue p-3 sm:p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-white">
-              Total Earnings
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-dark-turquoise" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              N/A
-            </div>
-            <p className="text-xs text-dark-turquoise">Total earnings</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-tr from-sapphire to-dark-turquoise p-3 sm:p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-white">
-              Requests Completed
-            </CardTitle>
-            <CheckCircle className="h-4 w-4 text-light-blue-gradient" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              N/A
-            </div>
-            <p className="text-xs text-dark-turquoise">Completed requests</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-tr from-pacific-blue to-dark-turquoise p-3 sm:p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-white">
-              Upcoming Requests
-            </CardTitle>
-            <CalendarClock className="h-4 w-4 text-dark-blue-gradient" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              N/A
-            </div>
-            <p className="text-xs text-dark-turquoise">Upcoming requests</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-tr from-medium-purple to-sapphire p-3 sm:p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium text-white">
-              Customer Rating
-            </CardTitle>
-            <Star className="h-4 w-4 text-light-blue-gradient" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-base sm:text-lg lg:text-2xl font-bold text-white">
-              N/A
-            </div>
-            <p className="text-xs text-dark-turquoise">
-              Rating
-            </p>
-          </CardContent>
-        </Card>
-=======
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href}>
             <Card className={cn("bg-gradient-to-tr border-none transition-transform hover:scale-[1.02] cursor-pointer", stat.color)}>
@@ -183,7 +91,6 @@ export default function DashboardPage() {
             </Card>
           </Link>
         ))}
->>>>>>> 6c9b3ec (feat: the rest)
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
