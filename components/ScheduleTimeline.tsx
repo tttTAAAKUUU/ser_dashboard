@@ -123,7 +123,7 @@ export default function ScheduleTimeline() {
               </div>
               <div className="bg-[#1B91D7] p-3 rounded-2xl rounded-tr-none max-w-[80%] ml-auto text-right">
                 <p className="text-[10px] font-bold text-white/70 mb-1 uppercase">You</p>
-                <p className="text-sm">Yes, I'm just finishing up my previous job. See you soon!</p>
+                <p className="text-sm">Yes, I&apos;m just finishing up my previous job. See you soon!</p>
               </div>
             </div>
             <div className="p-4 border-t border-zinc-800 bg-zinc-950">

@@ -161,7 +161,7 @@ export default function ProfilePage() {
                         <Star key={i} size={10} fill={i < review.rating ? "currentColor" : "none"} />
                       ))}
                     </div>
-                    <p className="text-[11px] text-zinc-400 leading-normal italic">"{review.comment}"</p>
+                    <p className="text-[11px] text-zinc-400 leading-normal italic\">&quot;{review.comment}&quot;</p>
                   </div>
                 ))}
               </div>

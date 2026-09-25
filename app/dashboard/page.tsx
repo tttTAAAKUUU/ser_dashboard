@@ -102,5 +102,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");

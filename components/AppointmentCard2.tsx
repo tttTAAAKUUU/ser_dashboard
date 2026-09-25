@@ -89,7 +89,7 @@ export function RequestCard({
               <User size={10} /> Client: {name}
             </div>
             <p className="text-sm text-slate-300 line-clamp-2 bg-slate-900/40 p-2.5 rounded-md border border-white/5 italic">
-              "{description}"
+              &quot;{description}&quot;
             </p>
           </div>
 

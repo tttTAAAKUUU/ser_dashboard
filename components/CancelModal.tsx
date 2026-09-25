@@ -3,9 +3,14 @@
 import React, { useState } from "react";
 import { X, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Appointment } from "./AppointmentCard";
 
 // ✅ Proper TypeScript props instead of 'any'
+type Appointment = {
+  id: number;
+  serviceName: string;
+  clientName: string;
+};
+
 type CancelModalProps = {
   appointment: Appointment;
   onClose: () => void;

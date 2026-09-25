@@ -72,7 +72,7 @@ export function RequestCard({ req }: { req: any }) {
 
             <div className="bg-zinc-950/50 p-3 rounded-lg border border-zinc-800/50">
               <p className="text-[10px] text-zinc-500 font-black uppercase mb-1 tracking-widest">Client Instructions</p>
-              <p className="text-xs text-zinc-300 italic leading-relaxed">"{req.description}"</p>
+              <p className="text-xs text-zinc-300 italic leading-relaxed">&quot;{req.description}&quot;</p>
             </div>
           </div>
 

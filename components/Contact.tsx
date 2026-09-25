@@ -11,8 +11,8 @@ type Props = {
     clientName: string;
     dateISO: string;
   } | null; // Allow null to prevent crashes
-  onClose: () => void;
-  onConfirm: () => void;
+  onClose?: () => void;
+  onConfirm?: () => void;
 };
 
 export default function CancelModal({ appointment, onClose, onConfirm }: Props) {
