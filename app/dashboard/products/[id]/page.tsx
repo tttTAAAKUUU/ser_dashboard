@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRouter, useParams } from "next/navigation";
-import { useSession } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 import React, { useState, useEffect } from "react";
 import {
   fetchProductById,
@@ -37,7 +37,7 @@ import { cn } from "@/lib/utils";
 export default function EditProductPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { session } = useSession();
+  const { session } = useAuth();
 
   const { data: product, isLoading, error } = useQuery({
     queryKey: ["product", id],

@@ -1,26 +1,26 @@
-// types/requests.ts
+// data/products.ts
 
-export interface Request {
-  id: string;
-  title: string;
+export interface Product {
+  _id?: string;
+  id?: string;
   name: string;
-  date: string;
-  time: string;
+  category: string;
   description: string;
-  address: string;
-  area: string;
   price: number;
-  stars: number;
+  stock: number;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const BACKEND_URL = "https://bos-backend-v2-2.vercel.app";
 
 /**
- * Fetch all requests.
- * @param token Clerk's session token.
+ * Fetch all products.
+ * @param token Session token for authentication.
  */
-export const fetchRequests = async (token: string): Promise<Request[]> => {
-  const response = await fetch(`${BACKEND_URL}/api/requests`, {
+export const fetchProducts = async (token: string): Promise<Product[]> => {
+  const response = await fetch(`${BACKEND_URL}/api/products`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -29,19 +29,19 @@ export const fetchRequests = async (token: string): Promise<Request[]> => {
   });
 
   if (!response.ok) {
-    throw new Error(`Error fetching requests: ${response.statusText}`);
+    throw new Error(`Error fetching products: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Fetch a single request by ID.
- * @param id Request ID.
- * @param token Clerk's session token.
+ * Fetch a single product by ID.
+ * @param id Product ID.
+ * @param token Session token for authentication.
  */
-export const fetchRequestById = async (id: string, token: string): Promise<Request> => {
-  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
+export const fetchProductById = async (id: string, token: string): Promise<Product> => {
+  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -50,46 +50,46 @@ export const fetchRequestById = async (id: string, token: string): Promise<Reque
   });
 
   if (!response.ok) {
-    throw new Error(`Error fetching request: ${response.statusText}`);
+    throw new Error(`Error fetching product: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Update a request by ID.
- * @param id Request ID.
- * @param updatedRequest Updated request data.
- * @param token Clerk's session token.
+ * Update a product by ID.
+ * @param id Product ID.
+ * @param updatedProduct Updated product data.
+ * @param token Session token for authentication.
  */
-export const updateRequestById = async (
+export const updateProductById = async (
   id: string,
-  updatedRequest: Partial<Request>,
+  updatedProduct: Partial<Product>,
   token: string
-): Promise<Request> => {
-  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
+): Promise<Product> => {
+  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(updatedRequest),
+    body: JSON.stringify(updatedProduct),
   });
 
   if (!response.ok) {
-    throw new Error(`Error updating request: ${response.statusText}`);
+    throw new Error(`Error updating product: ${response.statusText}`);
   }
 
   return response.json();
 };
 
 /**
- * Delete a request by ID.
- * @param id Request ID.
- * @param token Clerk's session token.
+ * Delete a product by ID.
+ * @param id Product ID.
+ * @param token Session token for authentication.
  */
-export const deleteRequestById = async (id: string, token: string): Promise<void> => {
-  const response = await fetch(`${BACKEND_URL}/api/requests/${id}`, {
+export const deleteProductById = async (id: string, token: string): Promise<void> => {
+  const response = await fetch(`${BACKEND_URL}/api/products/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -98,6 +98,6 @@ export const deleteRequestById = async (id: string, token: string): Promise<void
   });
 
   if (!response.ok) {
-    throw new Error(`Error deleting request: ${response.statusText}`);
+    throw new Error(`Error deleting product: ${response.statusText}`);
   }
 };

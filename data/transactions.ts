@@ -15,7 +15,7 @@ export const BACKEND_URL = "https://bos-backend-v2-2.vercel.app";
 
 /**
  * Fetch transactions from the backend API.
- * @param token Clerk's session token.
+ * @param token Session token for authentication.
  * @returns A list of transactions with normalized structure.
  */
 export const fetchTransactions = async (token: string): Promise<Transaction[]> => {

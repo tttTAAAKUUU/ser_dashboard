@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 
 const BACKEND_URL = "https://test-bos-omega.vercel.app";
 
@@ -25,7 +25,7 @@ function AddProducts() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const { session } = useSession();
+  const { session } = useAuth();
 
   const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();

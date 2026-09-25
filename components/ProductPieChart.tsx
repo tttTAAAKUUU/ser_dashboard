@@ -21,7 +21,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts, Product } from "@/data/products";
-import { useSession } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 
 const COLORS = [
   "#003DA5", // Cobalt
@@ -81,7 +81,7 @@ const renderActiveShape = (props: any) => {
 };
 
 export function ProductPieChart() {
-  const { session } = useSession();
+  const { session } = useAuth();
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const { data: products = [], isLoading, error } = useQuery({

@@ -26,7 +26,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts, Product } from "@/data/products";
-import { useSession } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 
 const COLORS = [
   "#003DA5", // Cobalt
@@ -43,7 +43,7 @@ const chartConfig: ChartConfig = {
 };
 
 export function BestProduct() {
-  const { session } = useSession();
+  const { session } = useAuth();
 
   const { data: products = [], isLoading, error } = useQuery({
     queryKey: ["products"],
